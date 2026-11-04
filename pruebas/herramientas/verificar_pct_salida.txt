@@ -1,0 +1,28 @@
+Resolucion N = 12 bits, MAX = 4095
+Valores comprobados: 4096
+Diferencias entre formula entera y redondeo exacto: 0
+Empates exactos (x.5) posibles: 0  (MAX es impar, por eso no hay)
+Funcion no decreciente: True
+PCT(0) = 0, PCT(MAX) = 100
+Mayor valor intermedio 100*ADC + MAX/2 = 411547
+  cabe en uint32 (< 4294967296): True
+  cabe en uint16 (< 65536): False  -> por eso se usa uint32
+
+Puntos de referencia (N = 12)
+  ADC =     0 -> PCT =   0   (100*ADC/MAX =   0.000)
+  ADC =     1 -> PCT =   0   (100*ADC/MAX =   0.024)
+  ADC =    20 -> PCT =   0   (100*ADC/MAX =   0.488)
+  ADC =    21 -> PCT =   1   (100*ADC/MAX =   0.513)
+  ADC =  1024 -> PCT =  25   (100*ADC/MAX =  25.006)
+  ADC =  2047 -> PCT =  50   (100*ADC/MAX =  49.988)
+  ADC =  2048 -> PCT =  50   (100*ADC/MAX =  50.012)
+  ADC =  2866 -> PCT =  70   (100*ADC/MAX =  69.988)
+  ADC =  3071 -> PCT =  75   (100*ADC/MAX =  74.994)
+  ADC =  3072 -> PCT =  75   (100*ADC/MAX =  75.018)
+  ADC =  4095 -> PCT = 100   (100*ADC/MAX = 100.000)
+
+Ejemplo del mandato (ADC = 2866 -> PCT = 70): coincide
+  PCT = 60: ADC desde 2437 hasta 2477
+  PCT = 62: ADC desde 2519 hasta 2559
+  PCT = 67: ADC desde 2724 hasta 2764
+  PCT = 72: ADC desde 2928 hasta 2968
