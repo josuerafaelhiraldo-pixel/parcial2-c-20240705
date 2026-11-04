@@ -1,0 +1,25 @@
+# Salidas de compilación de STM32CubeIDE
+**/Debug/
+**/Release/
+*.o
+*.d
+*.su
+*.cyclo
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+
+# Archivos del espacio de trabajo y temporales
+.metadata/
+RemoteSystemsTempFiles/
+__pycache__/
+*.pyc
+*.tmp
+*.bak
+Thumbs.db
+desktop.ini
+
+# Nota: los registros de prueba (*.log) y las capturas SÍ se versionan,
+# porque son la evidencia de los resultados P01 a P10.

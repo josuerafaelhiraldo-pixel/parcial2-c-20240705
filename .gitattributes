@@ -1,0 +1,15 @@
+# Normaliza los saltos de línea del código y los documentos.
+* text=auto
+
+# Los registros de la terminal son evidencia: no se modifican (conservan CRLF).
+*.log -text
+
+# Archivos binarios
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.mp4 binary
+*.elf binary
+*.bin binary
