@@ -1,12 +1,12 @@
 Resolucion N = 12 bits, MAX = 4095
 Valores comprobados: 4096
 Diferencias entre formula entera y redondeo exacto: 0
-Empates exactos (x.5) posibles: 0  (MAX es impar, por eso no hay)
-Funcion no decreciente: True
+Empates exactos (x.5): 0  (MAX es impar, por eso no hay)
+Funcion no decreciente: si
 PCT(0) = 0, PCT(MAX) = 100
 Mayor valor intermedio 100*ADC + MAX/2 = 411547
-  cabe en uint32 (< 4294967296): True
-  cabe en uint16 (< 65536): False  -> por eso se usa uint32
+  cabe en uint32 (< 4294967296): si
+  cabe en uint16 (< 65536): no  -> por eso se usa uint32
 
 Puntos de referencia (N = 12)
   ADC =     0 -> PCT =   0   (100*ADC/MAX =   0.000)

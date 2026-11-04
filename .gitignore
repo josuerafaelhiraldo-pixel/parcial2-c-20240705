@@ -14,8 +14,6 @@
 # Archivos del espacio de trabajo y temporales
 .metadata/
 RemoteSystemsTempFiles/
-__pycache__/
-*.pyc
 *.tmp
 *.bak
 Thumbs.db
