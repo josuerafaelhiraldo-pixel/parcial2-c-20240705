@@ -54,3 +54,12 @@ El código propio vive en archivos nuevos (`app.c`, `app.h`, `app_config.h`). En
 | `USER CODE 3` (dentro de `while (1)`) | `App_Loop();` |
 
 Los vectores de interrupción los genera CubeMX en `stm32f4xx_it.c` y llaman al HAL, que limpia las banderas. Los callbacks (`HAL_TIM_PeriodElapsedCallback`, `HAL_UART_RxCpltCallback`, `HAL_ADC_ConvCpltCallback`) son código propio.
+
+## Resultado de la generación
+
+El proyecto se generó con STM32CubeMX 6.18.1 y el paquete STM32Cube FW_F4 V1.28.3, y compila con 0 errores y 0 advertencias.
+
+La configuración real coincide con las tablas anteriores: PLL con M = 16, N = 336 y P = 4 (HSI de 16 MHz a 84 MHz), TIM6 con PSC = 83 y ARR = 999, ADC1 en IN0 con 144 ciclos de muestreo, USART2 a 115200 8N1 y las cuatro prioridades indicadas. El único ajuste respecto al plan es de organización de archivos:
+
+- La opción *Generate Under Root* quedó activa. El código generado queda en `Inc/`, `Src/` y `Startup/` dentro de `Parcial2_20240705/`, sin la carpeta `Core/` que se suponía en un principio. Es la misma estructura del parcial 1.
+- Los archivos propios (`app.c`, `app.h`, `app_config.h`) están en esas mismas carpetas. CubeMX no los genera, así que una regeneración no los toca.

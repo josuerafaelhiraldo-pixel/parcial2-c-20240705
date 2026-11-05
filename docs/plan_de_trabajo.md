@@ -11,8 +11,8 @@ Apertura: lunes 2 de noviembre de 2026. Cierre: domingo 8 de noviembre de 2026, 
 - [x] Configuración de CubeMX y arquitectura.
 - [x] Plan de pruebas y plantilla de resultados P01 a P10.
 - [x] Verificación de la fórmula de porcentaje para los 4096 valores del ADC.
-- [ ] Proyecto de CubeIDE generado y compilando.
-- [ ] `app_config.h` con las constantes del mandato y enlace `App_Init` / `App_Loop`.
+- [x] Proyecto de CubeIDE generado y compilando.
+- [x] `app_config.h` con las constantes del mandato y enlace `App_Init` / `App_Loop`.
 
 ## Hito 1: base de tiempo y GPIO
 
