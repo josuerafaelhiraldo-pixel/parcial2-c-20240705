@@ -1,12 +1,12 @@
 /* app.c - Une los modulos de la aplicacion.
- * Esqueleto inicial: los modulos se agregan en los siguientes commits
- * (docs/plan_de_trabajo.md). */
+ * Los modulos se agregan por hitos (docs/plan_de_trabajo.md). */
 #include "app.h"
 #include "app_config.h"
+#include "tick.h"
 
 void App_Init(void)
 {
-    /* Aqui se inician la base de tiempo, el ADC, la UART y las tareas. */
+    Tick_Init();            /* arranca TIM6: desde aqui el contador cuenta milisegundos */
 }
 
 void App_Loop(void)
