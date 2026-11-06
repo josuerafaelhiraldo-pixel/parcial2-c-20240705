@@ -14,7 +14,7 @@ Placa: STM32 NUCLEO-F446RE (microcontrolador STM32F446RE). Se reutiliza el monta
 | UART RX | PA3 | Puente ST-LINK (USB) | USART2 | USART2 | |
 | Base de tiempo | | | | TIM6 | 84 MHz |
 
-Los números de pin de los conectores (CN5, CN6, CN8) se verifican contra el manual de usuario de la placa (UM1724) antes de cablear.
+Los números de pin de los conectores (CN5, CN6, CN8) coinciden con el diagrama de pines de la NUCLEO-F446RE: A0 es el pin 1 de CN8, D12 es el pin 5 de CN5, 3V3 es el pin 4 de CN6 y GND está en los pines 6 y 7 de CN6 y en el pin 7 de CN5. Al cablear se siguen además las etiquetas serigrafiadas de la placa (A0, D12, 3V3, GND). Foto del montaje: `evidencias/montaje_cableado.jpg`.
 
 ## Esquema de conexiones
 
@@ -51,7 +51,7 @@ Precauciones:
 | Canal | IN0 (PA0) |
 | Resolución N | 12 bits; rango del dato 0 a 4095 (2^12 − 1) |
 | Alineación | Derecha |
-| VREF+ | VDDA = 3,3 V nominal. Se mide con el multímetro en el pin 3V3 y se registra en `pruebas/resultados.md` |
+| VREF+ | VDDA = 3,3 V nominal. Medido con el multímetro entre 3V3 y GND: **3,30 V** (5 de noviembre de 2026, placa alimentada por USB; foto en `evidencias/vref_multimetro.jpg`) |
 | Rango de entrada | 0 V a VREF+ |
 | LSB | 3,3 V / 4095 ≈ 0,806 mV |
 | Disparo | Por software, una vez cada 100 ms desde la tarea de adquisición |
