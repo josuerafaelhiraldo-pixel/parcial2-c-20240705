@@ -29,6 +29,7 @@
 #define APP_LED_ACT_PERIOD_MS       500U    /* el LED de actividad cambia cada 500 ms */
 #define APP_TELEMETRY_PERIOD_MS     1000U   /* una linea de telemetria cada 1000 ms */
 #define APP_DEBOUNCE_MS             30U     /* nivel estable minimo del pulsador */
+#define APP_BTN_SAMPLE_MS           1U      /* el pulsador se muestrea cada 1 ms */
 
 /* ---- ADC (RQ-03, RQ-05): ADC1, canal IN0 en PA0, 12 bits, VREF+ = 3,3 V ---- */
 #define APP_ADC_BITS            12U
@@ -56,6 +57,7 @@
 
 /* ---- Comprobaciones en tiempo de compilacion ---- */
 _Static_assert(APP_DEBOUNCE_MS >= 30U, "RQ-06: el antirrebote debe ser de al menos 30 ms");
+_Static_assert((APP_DEBOUNCE_MS % APP_BTN_SAMPLE_MS) == 0U, "el antirrebote debe ser multiplo del muestreo");
 _Static_assert((APP_LED_ACT_PERIOD_MS % APP_ADC_PERIOD_MS) == 0U, "los periodos deben ser multiplos del de 100 ms");
 _Static_assert((APP_TELEMETRY_PERIOD_MS % APP_ADC_PERIOD_MS) == 0U, "los periodos deben ser multiplos del de 100 ms");
 _Static_assert(APP_THR_MIN_PCT >= APP_HYST_PCT, "THR - 5 no puede ser negativo");
