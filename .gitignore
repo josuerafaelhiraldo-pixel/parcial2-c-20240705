@@ -21,3 +21,6 @@ desktop.ini
 
 # Nota: los registros de prueba (*.log) y las capturas SÍ se versionan,
 # porque son la evidencia de los resultados P01 a P10.
+
+# Configuracion de ejecucion y depuracion que CubeIDE crea por equipo
+*.launch
