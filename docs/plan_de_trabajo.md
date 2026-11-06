@@ -16,10 +16,10 @@ Apertura: lunes 2 de noviembre de 2026. Cierre: domingo 8 de noviembre de 2026, 
 
 ## Hito 1: base de tiempo y GPIO
 
-- [ ] TIM6 a 1 kHz con contador de milisegundos y planificador de tareas sin deriva.
-- [ ] LED de actividad cada 500 ms.
-- [ ] Pulsador con antirrebote de 30 ms, una acción por pulsación y validación de la liberación.
-- [ ] Prueba parcial: P02 (LED) y P05 (pulsador).
+- [x] TIM6 a 1 kHz con contador de milisegundos y planificador de tareas sin deriva.
+- [x] LED de actividad cada 500 ms.
+- [x] Pulsador con antirrebote de 30 ms, una acción por pulsación y validación de la liberación.
+- [x] Prueba parcial: P02 (LED, a simple vista) y P05 (pulsador, con el depurador). La medición con tiempos queda para la terminal serie.
 
 ## Hito 2: ADC y alarma
 
