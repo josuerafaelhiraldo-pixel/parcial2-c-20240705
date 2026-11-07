@@ -14,7 +14,7 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | P04 | Con THR = 70 y PCT = 60, 72, 67, 62: ALARM = 0, 1, 1, 0 | Respuestas de `STATUS`: PCT 61 da ALARM 0; PCT 74 da ALARM 1 (dos respuestas); PCT 67, llegando desde 75, da ALARM 1; PCT 62 da ALARM 0. La telemetría registra además PCT 72 con ALARM 1 y PCT 60 con ALARM 0. En los 122 registros del log ninguno incumple la regla (PCT ≥ 70 da ALARM 1; PCT < 65 da ALARM 0) | PASS | `evidencias/P04_histeresis.log` |
 | P05 | Una alternancia por pulsación; sin repetición al mantener; rebotes ignorados | Cinco pulsaciones separadas: MODE pasó PAUSE, RUN, PAUSE, RUN, PAUSE y cada `STATUS` coincidió con la telemetría. Una pulsación mantenida unos 5 s: una sola alternancia (PAUSE a RUN en t=8146000) y ninguna más en los 14 s siguientes. El rebote natural de B1 no produjo alternancias extra | PASS | `evidencias/P05_boton.log`, `evidencias/P05_boton_mantenido.log` |
 | P06 | En PAUSE la alarma está apagada y las demás tareas continúan; START restaura RUN y enciende la alarma | `STOP` con PCT 80 y la alarma encendida: `OK PAUSE` y la telemetría siguiente muestra ALARM 0. En 111 líneas de telemetría en PAUSE, 81 con PCT ≥ 70 (hasta 99), ALARM fue siempre 0; el ADC siguió cambiando (68 valores distintos) y `t` avanzó de 1000 en 1000 sin saltos. `START` con PCT 80: `OK RUN` y ALARM 1 en la telemetría siguiente; `START` con PCT 30: `OK RUN` y ALARM 0. LD2 siguió parpadeando en PAUSE (observación directa) | PASS | `evidencias/P06_pause_run.log` |
-| P07 | `THR 50` enciende, `THR 80` apaga; se aceptan 10 y 95; respuestas `OK THR=n` | | PENDIENTE | |
+| P07 | `THR 50` enciende, `THR 80` apaga; se aceptan 10 y 95; respuestas `OK THR=n` | Con PCT 60 y la alarma apagada: `THR 50` da `OK THR=50` y ALARM 1; `THR 80` da `OK THR=80` y ALARM 0; `THR 10` da `OK THR=10` y ALARM 1; `THR 95` da `OK THR=95` y ALARM 0. En cada caso, la telemetría siguiente y el `STATUS` posterior muestran el THR nuevo y la alarma esperada | PASS | `evidencias/P07_umbral.log` |
 | P08 | Un `ERR` por línea inválida; THR y modo sin cambios | | PENDIENTE | |
 | P09 | Una respuesta por comando completo; la línea de 33 caracteres da `ERR`; el STATUS posterior funciona | | PENDIENTE | |
 | P10 | Sin bloqueos ni líneas corruptas; respuestas ≤ 100 ms; tiempos dentro de ±5 % | | PENDIENTE | |
@@ -74,6 +74,18 @@ Las líneas son las de `evidencias/P06_pause_run.log`. THR = 70 durante toda la 
 | `START` con PCT 30 | `OK RUN` | t=9402000, RUN, ALARM 0 | 154 y 155 |
 | `STATUS` en RUN con PCT 30 | t=9411254, RUN, ALARM 0 | — | 166 |
 
+## Detalle de P07
+
+PCT = 60 durante toda la prueba, con MODE = RUN. Las líneas son las de `evidencias/P07_umbral.log`.
+
+| Comando | Respuesta | Primera telemetría posterior | `STATUS` posterior |
+| --- | --- | --- | --- |
+| `STATUS` inicial | t=9927942, THR 70, ALARM 0 (línea 5) | — | — |
+| `THR 50` | `OK THR=50` (línea 15) | THR 50, ALARM 1 (línea 16) | t=9943832, THR 50, ALARM 1 (línea 25) |
+| `THR 80` | `OK THR=80` (línea 36) | THR 80, ALARM 0 (línea 37) | t=9960879, THR 80, ALARM 0 (línea 46) |
+| `THR 10` | `OK THR=10` (línea 57) | THR 10, ALARM 1 (línea 58) | t=9976903, THR 10, ALARM 1 (línea 66) |
+| `THR 95` | `OK THR=95` (línea 77) | THR 95, ALARM 0 (línea 78) | t=9992233, THR 95, ALARM 0 (línea 86) |
+
 ## Comprobaciones parciales del Hito 1
 
 Son verificaciones intermedias hechas durante el desarrollo, el 5 de noviembre de 2026. No sustituyen a las pruebas P02 y P05 finales, que se ejecutan con el firmware definitivo y la terminal serie, por eso sus estados arriba siguen en PENDIENTE.
@@ -127,3 +139,4 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 - **P05, potenciómetro.** En las líneas 36 y 37 de `P05_boton.log` el PCT baja de 62 a 0 porque se movió el potenciómetro; no interviene en la prueba.
 - **P06, estado inicial.** El registro empieza en PAUSE, el modo que había quedado antes de abrirlo, de modo que el primer `STOP` (líneas 22 a 24) se envió estando ya en PAUSE y respondió `OK PAUSE` sin cambios. La transición de RUN a PAUSE con la alarma encendida está en el segundo `STOP` (líneas 131 a 133).
 - **P06, LD2.** El parpadeo de LD2 durante la PAUSE se comprobó a simple vista; el registro solo prueba que el programa principal sigue en marcha (la telemetría continúa cada segundo).
+- **P07, restauración de THR.** El último paso del procedimiento (volver a `THR 70`) no se completó: el texto se escribió dos veces antes de pulsar Enter (líneas 95 y 101), la placa recibió `THR 70THR 70` y respondió `ERR` (línea 102) sin cambiar THR, que quedó en 95 hasta el final del registro (línea 114). Ese paso no forma parte del criterio de P07.
