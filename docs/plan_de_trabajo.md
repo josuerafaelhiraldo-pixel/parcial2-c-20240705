@@ -30,11 +30,11 @@ Apertura: lunes 2 de noviembre de 2026. Cierre: domingo 8 de noviembre de 2026, 
 
 ## Hito 3: UART
 
-- [ ] Recepción por interrupción con búfer circular y armado de líneas (LF / CRLF, 32 caracteres).
-- [ ] Cola de transmisión por líneas completas.
-- [ ] Comandos `STATUS`, `THR n`, `START`, `STOP` y `ERR`.
-- [ ] Telemetría cada 1000 ms.
-- [ ] Prueba parcial: P01, P06 a P09.
+- [x] Recepción por interrupción con búfer circular y armado de líneas (LF / CRLF, 32 caracteres).
+- [x] Cola de transmisión por líneas completas.
+- [x] Comandos `STATUS`, `THR n`, `START`, `STOP` y `ERR`.
+- [x] Telemetría cada 1000 ms.
+- [x] Prueba parcial: P01, P06 a P09 con la terminal serie. La ejecución formal con registros y marcas de tiempo queda para el Hito 4.
 
 ## Hito 4: integración y pruebas
 
