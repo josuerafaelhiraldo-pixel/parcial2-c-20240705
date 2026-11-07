@@ -12,7 +12,7 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | P02 | Adquisición cada 100 ms, LED cada 500 ms, telemetría cada 1000 ms (±5 %) | | PENDIENTE | |
 | P03 | PCT = 100 × Vin / VREF dentro de ±3 puntos; ADC en rango; redondeo correcto | Con VREF = 3,30 V: 0,00 V da ADC 0 y PCT 0 (esperado 0,0); 1,66 V da ADC 2066 y 2057, PCT 50 (esperado 50,3); 3,30 V da ADC 4085, PCT 100 (esperado 100,0). Diferencia máxima 0,3 puntos; ADC dentro de 0 a 4095; el redondeo coincide con 100 × ADC / 4095 | PASS | `evidencias/P03_niveles.log`, `evidencias/P03_multimetro_0pct.jpg`, `evidencias/P03_multimetro_50pct.jpg`, `evidencias/P03_multimetro_100pct.jpg` |
 | P04 | Con THR = 70 y PCT = 60, 72, 67, 62: ALARM = 0, 1, 1, 0 | Respuestas de `STATUS`: PCT 61 da ALARM 0; PCT 74 da ALARM 1 (dos respuestas); PCT 67, llegando desde 75, da ALARM 1; PCT 62 da ALARM 0. La telemetría registra además PCT 72 con ALARM 1 y PCT 60 con ALARM 0. En los 122 registros del log ninguno incumple la regla (PCT ≥ 70 da ALARM 1; PCT < 65 da ALARM 0) | PASS | `evidencias/P04_histeresis.log` |
-| P05 | Una alternancia por pulsación; sin repetición al mantener; rebotes ignorados | | PENDIENTE | |
+| P05 | Una alternancia por pulsación; sin repetición al mantener; rebotes ignorados | Cinco pulsaciones separadas: MODE pasó PAUSE, RUN, PAUSE, RUN, PAUSE y cada `STATUS` coincidió con la telemetría. Una pulsación mantenida unos 5 s: una sola alternancia (PAUSE a RUN en t=8146000) y ninguna más en los 14 s siguientes. El rebote natural de B1 no produjo alternancias extra | PASS | `evidencias/P05_boton.log`, `evidencias/P05_boton_mantenido.log` |
 | P06 | En PAUSE la alarma está apagada y las demás tareas continúan; START restaura RUN y enciende la alarma | | PENDIENTE | |
 | P07 | `THR 50` enciende, `THR 80` apaga; se aceptan 10 y 95; respuestas `OK THR=n` | | PENDIENTE | |
 | P08 | Un `ERR` por línea inválida; THR y modo sin cambios | | PENDIENTE | |
@@ -44,6 +44,20 @@ Comprobación de la banda en los dos sentidos, con la telemetría:
 
 - Subiendo, PCT 69 tiene ALARM 0 (línea 66) y PCT 71 ya tiene ALARM 1 (línea 67).
 - Bajando, PCT 69, 68, 67 y 65 tienen ALARM 1 (líneas 90 a 102) y PCT 61 tiene ALARM 0 (línea 103).
+
+## Detalle de P05
+
+La telemetría muestra el cambio de `MODE` en la primera línea posterior a la pulsación. Las líneas son las de cada registro.
+
+| Acción | Cambio de MODE en la telemetría | `STATUS` posterior | Registro y línea |
+| --- | --- | --- | --- |
+| Inicio | — | t=7627863, RUN | `P05_boton.log`, línea 5 |
+| Pulsación 1 | PAUSE en t=7631000 (línea 9) | t=7637575, PAUSE | `P05_boton.log`, línea 17 |
+| Pulsación 2 | RUN en t=7640000 (línea 20) | t=7643677, RUN | `P05_boton.log`, línea 25 |
+| Pulsación 3 | PAUSE en t=7647000 (línea 29) | t=7649247, PAUSE | `P05_boton.log`, línea 33 |
+| Pulsación 4 | RUN en t=7654000 (línea 38) | t=7656574, RUN | `P05_boton.log`, línea 42 |
+| Pulsación 5 | PAUSE en t=7661000 (línea 47) | t=7661939, PAUSE | `P05_boton.log`, línea 49 |
+| Mantenida unos 5 s | RUN en t=8146000 (línea 10), sin más cambios hasta t=8160000 | antes t=8141992, PAUSE; después t=8154530, RUN | `P05_boton_mantenido.log`, líneas 5 y 20 |
 
 ## Comprobaciones parciales del Hito 1
 
@@ -93,3 +107,6 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 - **P04, estado inicial.** El registro empieza con el potenciómetro en PCT 81 y la alarma encendida; el primer `STATUS` (línea 24) confirma `THR=70` y `MODE=RUN`. El nivel 1 se alcanza bajando, de modo que la prueba comprueba el apagado desde la alarma encendida.
 - **P04, valores de los niveles 1 y 2.** El potenciómetro no se detuvo exactamente en PCT 60 y 72: las respuestas de `STATUS` son PCT 61 y 74, en el mismo lado del umbral. Los valores exactos 72 y 60 están en la telemetría (líneas 31 y 32).
 - **P04, `STATUS` con Enter tardío.** El texto `STATUS` de la línea 58 se escribió sin pulsar Enter; la respuesta de la línea 72 llegó al pulsarlo, unos 12 s después, y refleja ese instante (PCT 74), no el de escribirlo. La línea 53 (`STATUS}`) y la línea 75 (`STATUS` sobre texto pendiente, es decir `STATUSSTATUS`) son líneas inválidas y la placa respondió `ERR` en ambas.
+- **P05, rebotes.** Los rebotes de menos de 30 ms no se pueden generar a mano. El rebote mecánico natural de B1 en cada una de las seis pulsaciones no produjo alternancias adicionales.
+- **P05, pulsación mantenida.** El registro no marca el instante en que se soltó el botón; el botón se mantuvo unos 5 s según el procedimiento. Lo que muestra el registro es que, tras la única alternancia, el modo no cambia en los 14 s siguientes (t=8146000 a t=8160000).
+- **P05, potenciómetro.** En las líneas 36 y 37 de `P05_boton.log` el PCT baja de 62 a 0 porque se movió el potenciómetro; no interviene en la prueba.
