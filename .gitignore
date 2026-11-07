@@ -24,3 +24,5 @@ desktop.ini
 
 # Configuracion de ejecucion y depuracion que CubeIDE crea por equipo
 *.launch
+
+*.sfrview.prefs
