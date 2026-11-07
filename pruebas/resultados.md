@@ -16,7 +16,7 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | P06 | En PAUSE la alarma está apagada y las demás tareas continúan; START restaura RUN y enciende la alarma | `STOP` con PCT 80 y la alarma encendida: `OK PAUSE` y la telemetría siguiente muestra ALARM 0. En 111 líneas de telemetría en PAUSE, 81 con PCT ≥ 70 (hasta 99), ALARM fue siempre 0; el ADC siguió cambiando (68 valores distintos) y `t` avanzó de 1000 en 1000 sin saltos. `START` con PCT 80: `OK RUN` y ALARM 1 en la telemetría siguiente; `START` con PCT 30: `OK RUN` y ALARM 0. LD2 siguió parpadeando en PAUSE (observación directa) | PASS | `evidencias/P06_pause_run.log` |
 | P07 | `THR 50` enciende, `THR 80` apaga; se aceptan 10 y 95; respuestas `OK THR=n` | Con PCT 60 y la alarma apagada: `THR 50` da `OK THR=50` y ALARM 1; `THR 80` da `OK THR=80` y ALARM 0; `THR 10` da `OK THR=10` y ALARM 1; `THR 95` da `OK THR=95` y ALARM 0. En cada caso, la telemetría siguiente y el `STATUS` posterior muestran el THR nuevo y la alarma esperada | PASS | `evidencias/P07_umbral.log` |
 | P08 | Un `ERR` por línea inválida; THR y modo sin cambios | Las siete líneas inválidas enviadas (`THR 9`, `THR 96`, `THR abc`, `THR 50x`, `THR 50 extra` y `HOLA` dos veces) dieron un solo `ERR` cada una: siete `ERR` y ningún `OK`. Las 70 líneas de telemetría y respuestas del registro muestran siempre THR 70, MODE RUN y ALARM 0, y el `STATUS` final responde con normalidad (t=10504684). Una línea vacía no produjo respuesta | PASS | `evidencias/P08_errores.log` |
-| P09 | Una respuesta por comando completo; la línea de 33 caracteres da `ERR`; el STATUS posterior funciona | | PENDIENTE | |
+| P09 | Una respuesta por comando completo; la línea de 33 caracteres da `ERR`; el STATUS posterior funciona | Con el macro `p09_fragmentos.ttl`: `STA` y, 2 s después, `TUS` con LF dieron una sola respuesta de `STATUS`, y ninguna durante la pausa. `STATUS` con CRLF y con LF dieron una respuesta cada uno. La línea de 32 caracteres, la de 33 con LF y la de 33 con CRLF dieron un solo `ERR` cada una. Cada `STATUS` posterior a un error respondió con normalidad. Total: 5 respuestas de `STATUS` y 3 `ERR`, ninguna respuesta de más. La telemetría siguió sin saltos (t de 1000 en 1000) | PASS | `evidencias/P09_fragmentos.log`, `pruebas/herramientas/p09_fragmentos.ttl` |
 | P10 | Sin bloqueos ni líneas corruptas; respuestas ≤ 100 ms; tiempos dentro de ±5 % | | PENDIENTE | |
 
 ## Detalle de P03
@@ -103,6 +103,24 @@ THR = 70, MODE = RUN y PCT = 60 durante toda la prueba. Las líneas son las de `
 | `HOLA` (segunda vez) | `ERR` | 61 y 62 |
 | `STATUS` final | t=10504684, THR 70, RUN, ALARM 0 | 75 y 76 |
 
+## Detalle de P09
+
+Las líneas son las de `evidencias/P09_fragmentos.log`. Las respuestas de `STATUS` se distinguen de la telemetría porque su `t` no es múltiplo de 1000. La última columna es la diferencia de marcas de tiempo entre el eco del texto enviado y la respuesta.
+
+| Paso del macro | Texto enviado | Respuesta | Líneas del registro | Eco a respuesta |
+| --- | --- | --- | --- | --- |
+| 1a | `STA` sin terminador | ninguna: durante la pausa de 2 s solo llega telemetría | 21 y 22 | — |
+| 1b | `TUS` con LF (`STATUS` completo) | una respuesta de `STATUS`, t=10894344 | 23 y 24 | 3 ms |
+| 2 | `STATUS` con CRLF | una respuesta, t=10896379 | 27 a 29 | 4 ms |
+| 3 | `STATUS` con LF | una respuesta, t=10898411 | 32 y 33 | 3 ms |
+| 4 | 32 caracteres `A` con LF | un `ERR` | 36 y 37 | 3 ms |
+| 5 | 33 caracteres `A` con LF | un `ERR` | 40 y 41 | 2 ms |
+| 6 | `STATUS` con LF | una respuesta, t=10904515 | 44 y 45 | 3 ms |
+| 7a | 33 caracteres `A` con CRLF | un `ERR` (un solo `ERR` aunque el terminador tenga dos bytes) | 48 a 50 | 2 ms |
+| 7b | `STATUS` con LF | una respuesta, t=10908579 | 53 y 54 | 2 ms |
+
+Resumen: 5 respuestas de `STATUS` (líneas 24, 29, 33, 45 y 54) y 3 `ERR` (líneas 37, 41 y 50). Las 52 líneas de telemetría del registro (t=10873000 a t=10924000) están completas y sin saltos.
+
 ## Comprobaciones parciales del Hito 1
 
 Son verificaciones intermedias hechas durante el desarrollo, el 5 de noviembre de 2026. No sustituyen a las pruebas P02 y P05 finales, que se ejecutan con el firmware definitivo y la terminal serie, por eso sus estados arriba siguen en PENDIENTE.
@@ -158,3 +176,7 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 - **P06, LD2.** El parpadeo de LD2 durante la PAUSE se comprobó a simple vista; el registro solo prueba que el programa principal sigue en marcha (la telemetría continúa cada segundo).
 - **P07, restauración de THR.** El último paso del procedimiento (volver a `THR 70`) no se completó: el texto se escribió dos veces antes de pulsar Enter (líneas 95 y 101), la placa recibió `THR 70THR 70` y respondió `ERR` (línea 102) sin cambiar THR, que quedó en 95 hasta el final del registro (línea 114). Ese paso no forma parte del criterio de P07.
 - **P08, `HOLA` dos veces.** `HOLA` se escribió dos veces (líneas 56 y 61) y cada una recibió su propio `ERR`; por eso hay siete `ERR` para seis líneas distintas del procedimiento. La línea 55 es un Enter sin texto y no produjo respuesta.
+- **P09, la línea de 32 caracteres.** Tiene el largo máximo permitido, así que la placa la acepta como línea y responde `ERR` porque no es un comando conocido (línea 37). La línea de 33 caracteres se rechaza por largo; en ambos casos el resultado visible es un solo `ERR`. Lo que prueba el paso 4 es que el límite de 32 no produce un error adicional ni descarta el `STATUS` siguiente.
+- **P09, marcas de tiempo repetidas.** Las 14 líneas de telemetría de las líneas 7 a 20 tienen la misma marca (19:18:21.23x) porque Tera Term estuvo detenido unos 14 s con el cuadro de selección del macro abierto y registró los datos acumulados al cerrarlo. No se perdió ninguna línea: `t` avanza de 1000 en 1000 de la línea 1 a la 70. Las marcas del macro (desde la línea 21) son las válidas para los intervalos de la tabla.
+- **P09, líneas en blanco.** Las líneas 28 y 49 aparecen solo en los pasos con CRLF y son el eco local del retorno de carro y del salto de línea enviados; en los pasos con LF no hay línea en blanco. La placa no envía líneas vacías.
+- **P09, eco pegado.** En la línea 21 `STA` quedó pegado al inicio de una línea de telemetría (`STAt=10893000;...`) por el eco local de Tera Term; la telemetría llegó completa.

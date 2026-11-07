@@ -1,0 +1,35 @@
+; P09: STATUS fragmentado, terminadores LF y CRLF, lineas de 32 y 33 caracteres.
+; Uso: abrir el log (Archivo > Log) y ejecutar este macro (Control > Macro).
+; Dura unos 20 s. No toques el teclado mientras corre.
+
+; 1. STATUS fragmentado en dos envios: no debe responder hasta recibir el LF
+send 'STA'
+mpause 2000
+sendln 'TUS'
+mpause 2000
+
+; 2. STATUS terminado en CRLF
+send 'STATUS' 13 10
+mpause 2000
+
+; 3. STATUS terminado solo en LF
+sendln 'STATUS'
+mpause 2000
+
+; 4. Linea de 32 caracteres con LF (comando invalido dentro del limite): un ERR
+sendln 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+mpause 2000
+
+; 5. Linea de 33 caracteres con LF: un ERR
+sendln 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+mpause 2000
+
+; 6. STATUS posterior: debe responder con normalidad
+sendln 'STATUS'
+mpause 2000
+
+; 7. Linea de 33 caracteres con CRLF, y STATUS posterior
+send 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' 13 10
+mpause 2000
+sendln 'STATUS'
+mpause 2000
