@@ -11,7 +11,6 @@
 static uint32_t s_tLed;     /* instante programado del proximo cambio del LED de actividad */
 static uint32_t s_tBtn;     /* instante programado del proximo muestreo del pulsador */
 static uint32_t s_tAdc;     /* instante programado de la proxima conversion del ADC */
-static uint32_t s_pct;      /* ultimo porcentaje; se quita cuando la alarma lo guarde */
 
 void App_Init(void)
 {
@@ -42,9 +41,10 @@ void App_Loop(void)
         (void)AdcIn_Start();
     }
 
-    /* Muestra nueva: se convierte a porcentaje fuera de la interrupcion (RQ-03). */
+    /* Muestra nueva: se convierte a porcentaje fuera de la interrupcion (RQ-03) y la alarma
+     * decide con ella (RQ-07, RQ-08). */
     if (AdcIn_Take(&raw) != 0U) {
-        s_pct = APP_PCT_FROM_ADC(raw);
+        Alarm_OnSample(APP_PCT_FROM_ADC(raw));
     }
 
     /* LED de actividad: cambia de estado cada 500 ms (RQ-02). Sigue activo en PAUSE. */
