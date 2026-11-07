@@ -15,7 +15,7 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | P05 | Una alternancia por pulsación; sin repetición al mantener; rebotes ignorados | Cinco pulsaciones separadas: MODE pasó PAUSE, RUN, PAUSE, RUN, PAUSE y cada `STATUS` coincidió con la telemetría. Una pulsación mantenida unos 5 s: una sola alternancia (PAUSE a RUN en t=8146000) y ninguna más en los 14 s siguientes. El rebote natural de B1 no produjo alternancias extra | PASS | `evidencias/P05_boton.log`, `evidencias/P05_boton_mantenido.log` |
 | P06 | En PAUSE la alarma está apagada y las demás tareas continúan; START restaura RUN y enciende la alarma | `STOP` con PCT 80 y la alarma encendida: `OK PAUSE` y la telemetría siguiente muestra ALARM 0. En 111 líneas de telemetría en PAUSE, 81 con PCT ≥ 70 (hasta 99), ALARM fue siempre 0; el ADC siguió cambiando (68 valores distintos) y `t` avanzó de 1000 en 1000 sin saltos. `START` con PCT 80: `OK RUN` y ALARM 1 en la telemetría siguiente; `START` con PCT 30: `OK RUN` y ALARM 0. LD2 siguió parpadeando en PAUSE (observación directa) | PASS | `evidencias/P06_pause_run.log` |
 | P07 | `THR 50` enciende, `THR 80` apaga; se aceptan 10 y 95; respuestas `OK THR=n` | Con PCT 60 y la alarma apagada: `THR 50` da `OK THR=50` y ALARM 1; `THR 80` da `OK THR=80` y ALARM 0; `THR 10` da `OK THR=10` y ALARM 1; `THR 95` da `OK THR=95` y ALARM 0. En cada caso, la telemetría siguiente y el `STATUS` posterior muestran el THR nuevo y la alarma esperada | PASS | `evidencias/P07_umbral.log` |
-| P08 | Un `ERR` por línea inválida; THR y modo sin cambios | | PENDIENTE | |
+| P08 | Un `ERR` por línea inválida; THR y modo sin cambios | Las siete líneas inválidas enviadas (`THR 9`, `THR 96`, `THR abc`, `THR 50x`, `THR 50 extra` y `HOLA` dos veces) dieron un solo `ERR` cada una: siete `ERR` y ningún `OK`. Las 70 líneas de telemetría y respuestas del registro muestran siempre THR 70, MODE RUN y ALARM 0, y el `STATUS` final responde con normalidad (t=10504684). Una línea vacía no produjo respuesta | PASS | `evidencias/P08_errores.log` |
 | P09 | Una respuesta por comando completo; la línea de 33 caracteres da `ERR`; el STATUS posterior funciona | | PENDIENTE | |
 | P10 | Sin bloqueos ni líneas corruptas; respuestas ≤ 100 ms; tiempos dentro de ±5 % | | PENDIENTE | |
 
@@ -86,6 +86,23 @@ PCT = 60 durante toda la prueba, con MODE = RUN. Las líneas son las de `evidenc
 | `THR 10` | `OK THR=10` (línea 57) | THR 10, ALARM 1 (línea 58) | t=9976903, THR 10, ALARM 1 (línea 66) |
 | `THR 95` | `OK THR=95` (línea 77) | THR 95, ALARM 0 (línea 78) | t=9992233, THR 95, ALARM 0 (línea 86) |
 
+## Detalle de P08
+
+THR = 70, MODE = RUN y PCT = 60 durante toda la prueba. Las líneas son las de `evidencias/P08_errores.log`.
+
+| Línea enviada | Respuesta | Líneas del registro |
+| --- | --- | --- |
+| `STATUS` inicial | t=10450849, THR 70, RUN, ALARM 0 | 4 y 5 |
+| `THR 9` | `ERR` | 14 y 15 |
+| `THR 96` | `ERR` | 22 y 23 |
+| `THR abc` | `ERR` | 30 y 31 |
+| `THR 50x` | `ERR` | 39 y 40 |
+| `THR 50 extra` | `ERR` | 46 a 48 |
+| Enter sin texto | ninguna respuesta | 55 |
+| `HOLA` | `ERR` | 56 a 58 |
+| `HOLA` (segunda vez) | `ERR` | 61 y 62 |
+| `STATUS` final | t=10504684, THR 70, RUN, ALARM 0 | 75 y 76 |
+
 ## Comprobaciones parciales del Hito 1
 
 Son verificaciones intermedias hechas durante el desarrollo, el 5 de noviembre de 2026. No sustituyen a las pruebas P02 y P05 finales, que se ejecutan con el firmware definitivo y la terminal serie, por eso sus estados arriba siguen en PENDIENTE.
@@ -140,3 +157,4 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 - **P06, estado inicial.** El registro empieza en PAUSE, el modo que había quedado antes de abrirlo, de modo que el primer `STOP` (líneas 22 a 24) se envió estando ya en PAUSE y respondió `OK PAUSE` sin cambios. La transición de RUN a PAUSE con la alarma encendida está en el segundo `STOP` (líneas 131 a 133).
 - **P06, LD2.** El parpadeo de LD2 durante la PAUSE se comprobó a simple vista; el registro solo prueba que el programa principal sigue en marcha (la telemetría continúa cada segundo).
 - **P07, restauración de THR.** El último paso del procedimiento (volver a `THR 70`) no se completó: el texto se escribió dos veces antes de pulsar Enter (líneas 95 y 101), la placa recibió `THR 70THR 70` y respondió `ERR` (línea 102) sin cambiar THR, que quedó en 95 hasta el final del registro (línea 114). Ese paso no forma parte del criterio de P07.
+- **P08, `HOLA` dos veces.** `HOLA` se escribió dos veces (líneas 56 y 61) y cada una recibió su propio `ERR`; por eso hay siete `ERR` para seis líneas distintas del procedimiento. La línea 55 es un Enter sin texto y no produjo respuesta.

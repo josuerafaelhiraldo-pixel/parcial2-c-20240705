@@ -61,6 +61,7 @@ Con Local echo activado, el texto escrito puede aparecer pegado a una línea de 
 | `P05_boton_mantenido.log` | Registro de una pulsación mantenida unos 5 s: una sola alternancia de PAUSE a RUN y ninguna más en los 14 s siguientes |
 | `P06_pause_run.log` | Registro con marcas de tiempo de `STOP` y `START` con PCT alto y bajo: en PAUSE la alarma queda apagada con PCT hasta 99, el ADC y la telemetría continúan, y `START` restaura RUN y decide la alarma con la última muestra |
 | `P07_umbral.log` | Registro con marcas de tiempo de los cambios de umbral `THR 50`, `THR 80`, `THR 10` y `THR 95` con PCT 60: respuesta `OK THR=n`, telemetría y `STATUS` posteriores con el THR nuevo y la alarma esperada |
+| `P08_errores.log` | Registro con marcas de tiempo de las líneas inválidas `THR 9`, `THR 96`, `THR abc`, `THR 50x`, `THR 50 extra` y `HOLA`: un `ERR` por línea, con THR 70 y MODE RUN sin cambios en toda la telemetría |
 
 ## Video de la demostración
 
