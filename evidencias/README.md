@@ -35,6 +35,17 @@ Cada fila de `pruebas/resultados.md` cita el archivo que la respalda.
 | `P05_boton_con_adc_1_pausa.png` | B1 pasa a PAUSE con el ADC activo (`s_raw` sigue cambiando) |
 | `P05_boton_con_adc_2_run.png` | B1 vuelve a RUN |
 
+## Archivos del Hito 3
+
+| Archivo | Contenido |
+| --- | --- |
+| `P01_enlace_uart_eco.png` | Enlace UART a 115200 8N1 con el firmware de eco: el texto escrito vuelve desde la placa (Local echo apagado en Tera Term) |
+| `P09_prueba_rapida_comandos.png` | Telemetría cada segundo, `STATUS`, `THR 50` con `OK THR=50`, `STOP` con `OK PAUSE` y `START` con `OK RUN` |
+| `P09_prueba_rapida_errores_1.png` | `THR 9`, `THR 96`, `THR abc`, `THR 50x`, `THR 50 extra` y `status`: un `ERR` cada uno, THR sigue en 50 |
+| `P09_prueba_rapida_errores_2.png` | `HOLA` y una línea larga: un `ERR` cada una, y el `STATUS` posterior responde |
+
+Con Local echo activado, el texto escrito puede aparecer pegado a una línea de telemetría. Es el eco local de Tera Term, no una mezcla de líneas de la placa.
+
 ## Video de la demostración
 
 (Se agrega el enlace al cierre del proyecto.)

@@ -40,6 +40,19 @@ Hechas el 6 de noviembre de 2026 con el depurador (vista Live Expressions) y el 
 | P06 (parcial) | Con la alarma encendida, B1 pasa a PAUSE y el LED se apaga al instante; B1 otra vez vuelve a RUN y enciende de inmediato si PCT ≥ 70. Si se baja el potenciómetro en PAUSE y se reanuda, queda apagada. Las muestras siguen llegando en PAUSE | Correcto | `evidencias/P05_boton_con_adc_1_pausa.png`, `evidencias/P05_boton_con_adc_2_run.png` |
 | P01 (parcial) | Tras el reinicio, la primera muestra decide la alarma: con el potenciómetro alto el LED enciende casi al instante; con el potenciómetro bajo queda apagado | Correcto | Observación directa |
 
+## Comprobaciones parciales del Hito 3
+
+Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Transmit = LF, Local echo activado). No sustituyen a P01 y P06 a P09 finales, que se ejecutan con registros y marcas de tiempo en el Hito 4; por eso sus estados arriba siguen en PENDIENTE. Con Local echo activado, el texto escrito puede verse pegado a una línea de telemetría: es solo la pantalla de Tera Term, no la placa.
+
+| Prueba | Comprobación | Resultado | Evidencia |
+| --- | --- | --- | --- |
+| P01 (parcial) | Enlace UART a 115200 8N1: con el firmware de eco, lo escrito en Tera Term vuelve desde la placa (Local echo apagado) | Correcto | `evidencias/P01_enlace_uart_eco.png` |
+| P02 (parcial) | La telemetría llega una vez por segundo: los valores de `t` avanzan de 1000 en 1000. La medición con marcas de tiempo queda para el Hito 4 | Correcto | `evidencias/P09_prueba_rapida_comandos.png` |
+| P06 (parcial) | `STOP` responde `OK PAUSE` y la telemetría sigue con `MODE=PAUSE;ALARM=0` aunque PCT = 80 supere THR = 50. `START` responde `OK RUN` y la telemetría siguiente muestra `MODE=RUN;ALARM=1` | Correcto | `evidencias/P09_prueba_rapida_comandos.png` |
+| P07 (parcial) | `THR 50` responde `OK THR=50` y el `STATUS` siguiente muestra `THR=50`. Los valores 10, 80 y 95 se prueban en P07 final | Correcto | `evidencias/P09_prueba_rapida_comandos.png` |
+| P08 (parcial) | `THR 9`, `THR 96`, `THR abc`, `THR 50x`, `THR 50 extra`, `status` y `HOLA` dan un solo `ERR` cada uno; THR sigue en 50 y el modo no cambia | Correcto | `evidencias/P09_prueba_rapida_errores_1.png`, `evidencias/P09_prueba_rapida_errores_2.png` |
+| P09 (parcial) | Una línea de más de 32 caracteres da un solo `ERR` y el `STATUS` siguiente responde con normalidad. El límite exacto de 32 y 33 caracteres se prueba en P09 final | Correcto | `evidencias/P09_prueba_rapida_errores_2.png` |
+
 ## Observaciones y FAIL explicados
 
 (Se completa al ejecutar las pruebas.)
