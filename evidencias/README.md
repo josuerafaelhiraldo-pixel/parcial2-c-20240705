@@ -59,6 +59,7 @@ Con Local echo activado, el texto escrito puede aparecer pegado a una línea de 
 | `P04_histeresis.log` | Registro con marcas de tiempo de la histéresis con THR = 70: respuestas de `STATUS` con PCT 61, 74, 67 y 62 y la telemetría de las subidas y bajadas por la banda de 65 a 69 |
 | `P05_boton.log` | Registro con marcas de tiempo de cinco pulsaciones separadas de B1: la telemetría y `STATUS` muestran PAUSE, RUN, PAUSE, RUN, PAUSE |
 | `P05_boton_mantenido.log` | Registro de una pulsación mantenida unos 5 s: una sola alternancia de PAUSE a RUN y ninguna más en los 14 s siguientes |
+| `P06_pause_run.log` | Registro con marcas de tiempo de `STOP` y `START` con PCT alto y bajo: en PAUSE la alarma queda apagada con PCT hasta 99, el ADC y la telemetría continúan, y `START` restaura RUN y decide la alarma con la última muestra |
 
 ## Video de la demostración
 

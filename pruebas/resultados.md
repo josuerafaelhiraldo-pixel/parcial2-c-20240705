@@ -13,7 +13,7 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | P03 | PCT = 100 × Vin / VREF dentro de ±3 puntos; ADC en rango; redondeo correcto | Con VREF = 3,30 V: 0,00 V da ADC 0 y PCT 0 (esperado 0,0); 1,66 V da ADC 2066 y 2057, PCT 50 (esperado 50,3); 3,30 V da ADC 4085, PCT 100 (esperado 100,0). Diferencia máxima 0,3 puntos; ADC dentro de 0 a 4095; el redondeo coincide con 100 × ADC / 4095 | PASS | `evidencias/P03_niveles.log`, `evidencias/P03_multimetro_0pct.jpg`, `evidencias/P03_multimetro_50pct.jpg`, `evidencias/P03_multimetro_100pct.jpg` |
 | P04 | Con THR = 70 y PCT = 60, 72, 67, 62: ALARM = 0, 1, 1, 0 | Respuestas de `STATUS`: PCT 61 da ALARM 0; PCT 74 da ALARM 1 (dos respuestas); PCT 67, llegando desde 75, da ALARM 1; PCT 62 da ALARM 0. La telemetría registra además PCT 72 con ALARM 1 y PCT 60 con ALARM 0. En los 122 registros del log ninguno incumple la regla (PCT ≥ 70 da ALARM 1; PCT < 65 da ALARM 0) | PASS | `evidencias/P04_histeresis.log` |
 | P05 | Una alternancia por pulsación; sin repetición al mantener; rebotes ignorados | Cinco pulsaciones separadas: MODE pasó PAUSE, RUN, PAUSE, RUN, PAUSE y cada `STATUS` coincidió con la telemetría. Una pulsación mantenida unos 5 s: una sola alternancia (PAUSE a RUN en t=8146000) y ninguna más en los 14 s siguientes. El rebote natural de B1 no produjo alternancias extra | PASS | `evidencias/P05_boton.log`, `evidencias/P05_boton_mantenido.log` |
-| P06 | En PAUSE la alarma está apagada y las demás tareas continúan; START restaura RUN y enciende la alarma | | PENDIENTE | |
+| P06 | En PAUSE la alarma está apagada y las demás tareas continúan; START restaura RUN y enciende la alarma | `STOP` con PCT 80 y la alarma encendida: `OK PAUSE` y la telemetría siguiente muestra ALARM 0. En 111 líneas de telemetría en PAUSE, 81 con PCT ≥ 70 (hasta 99), ALARM fue siempre 0; el ADC siguió cambiando (68 valores distintos) y `t` avanzó de 1000 en 1000 sin saltos. `START` con PCT 80: `OK RUN` y ALARM 1 en la telemetría siguiente; `START` con PCT 30: `OK RUN` y ALARM 0. LD2 siguió parpadeando en PAUSE (observación directa) | PASS | `evidencias/P06_pause_run.log` |
 | P07 | `THR 50` enciende, `THR 80` apaga; se aceptan 10 y 95; respuestas `OK THR=n` | | PENDIENTE | |
 | P08 | Un `ERR` por línea inválida; THR y modo sin cambios | | PENDIENTE | |
 | P09 | Una respuesta por comando completo; la línea de 33 caracteres da `ERR`; el STATUS posterior funciona | | PENDIENTE | |
@@ -58,6 +58,21 @@ La telemetría muestra el cambio de `MODE` en la primera línea posterior a la p
 | Pulsación 4 | RUN en t=7654000 (línea 38) | t=7656574, RUN | `P05_boton.log`, línea 42 |
 | Pulsación 5 | PAUSE en t=7661000 (línea 47) | t=7661939, PAUSE | `P05_boton.log`, línea 49 |
 | Mantenida unos 5 s | RUN en t=8146000 (línea 10), sin más cambios hasta t=8160000 | antes t=8141992, PAUSE; después t=8154530, RUN | `P05_boton_mantenido.log`, líneas 5 y 20 |
+
+## Detalle de P06
+
+Las líneas son las de `evidencias/P06_pause_run.log`. THR = 70 durante toda la prueba.
+
+| Paso | Respuesta | Telemetría o estado resultante | Línea |
+| --- | --- | --- | --- |
+| `STATUS` en PAUSE con PCT 82 | t=9266276, PAUSE, ALARM 0 | La alarma está apagada aunque PCT ≥ 70 | 7 |
+| Potenciómetro en PAUSE (PCT 94, 91 y 99) | — | ALARM 0 en todas las líneas | 39, 60 a 72, 138 |
+| `STATUS` en PAUSE con PCT 91 | t=9329331, PAUSE, ALARM 0 | — | 74 |
+| `START` con PCT 80 | `OK RUN` | t=9351000, RUN, ALARM 1 | 97 y 98 |
+| `STATUS` en RUN con PCT 80 | t=9364307, RUN, ALARM 1 | — | 113 |
+| `STOP` con PCT 80 y alarma encendida | `OK PAUSE` | t=9382000, PAUSE, ALARM 0 (PCT 80) | 132 y 133 |
+| `START` con PCT 30 | `OK RUN` | t=9402000, RUN, ALARM 0 | 154 y 155 |
+| `STATUS` en RUN con PCT 30 | t=9411254, RUN, ALARM 0 | — | 166 |
 
 ## Comprobaciones parciales del Hito 1
 
@@ -110,3 +125,5 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 - **P05, rebotes.** Los rebotes de menos de 30 ms no se pueden generar a mano. El rebote mecánico natural de B1 en cada una de las seis pulsaciones no produjo alternancias adicionales.
 - **P05, pulsación mantenida.** El registro no marca el instante en que se soltó el botón; el botón se mantuvo unos 5 s según el procedimiento. Lo que muestra el registro es que, tras la única alternancia, el modo no cambia en los 14 s siguientes (t=8146000 a t=8160000).
 - **P05, potenciómetro.** En las líneas 36 y 37 de `P05_boton.log` el PCT baja de 62 a 0 porque se movió el potenciómetro; no interviene en la prueba.
+- **P06, estado inicial.** El registro empieza en PAUSE, el modo que había quedado antes de abrirlo, de modo que el primer `STOP` (líneas 22 a 24) se envió estando ya en PAUSE y respondió `OK PAUSE` sin cambios. La transición de RUN a PAUSE con la alarma encendida está en el segundo `STOP` (líneas 131 a 133).
+- **P06, LD2.** El parpadeo de LD2 durante la PAUSE se comprobó a simple vista; el registro solo prueba que el programa principal sigue en marcha (la telemetría continúa cada segundo).
