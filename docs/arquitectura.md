@@ -50,10 +50,12 @@ Estados: RUN y PAUSE. Se pasa de uno a otro con una pulsación válida del botó
 | Muestra en PAUSE | Apagada |
 | `STOP` o pulsación que pasa a PAUSE | Se apaga al instante |
 | Paso de PAUSE a RUN | Reevalúa con la última muestra: encendida si PCT ≥ THR; si no, apagada |
-| `THR n` válido en RUN | Reevalúa con la última muestra, igual que arriba |
+| `THR n` válido en RUN | Reevalúa con la última muestra y las reglas de una muestra nueva, con el THR nuevo y el estado actual de la alarma |
 | `THR n` válido en PAUSE | Guarda THR; la alarma sigue apagada |
 | `START` estando en RUN | No cambia nada; conserva la decisión actual |
 | Primera muestra tras el reinicio | Reevalúa: encendida si PCT ≥ THR |
+
+Una sola función, `alarm_evaluate`, aplica estas reglas y es la única que cambia el estado de la alarma. La llaman cada muestra nueva, cada cambio de modo y cada cambio de THR, por lo que todas las filas de la tabla salen de la misma lógica. Una consecuencia deliberada: repetir `THR 70` con la alarma encendida y el PCT en la banda de histéresis no la apaga, porque la reevaluación usa la histéresis y no solo la comparación `PCT >= THR`.
 
 Ejemplo de P04 con THR = 70 (apaga por debajo de 65), partiendo de alarma apagada:
 
