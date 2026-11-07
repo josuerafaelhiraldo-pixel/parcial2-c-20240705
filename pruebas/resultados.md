@@ -1,14 +1,14 @@
 # Resultados de las pruebas P01 a P10
 
-**Versión del firmware probada:** (hash del commit o etiqueta; se completa en cada ejecución)
-**Fecha de ejecución:** (pendiente)
+**Versión del firmware probada:** commit `5e45328` (último cambio de firmware; los commits posteriores solo tocan documentación y pruebas)
+**Fecha de ejecución:** desde el 7 de noviembre de 2026 (Hito 4)
 **VREF+ medido:** 3,30 V con multímetro entre 3V3 y GND, el 5 de noviembre de 2026 (`evidencias/vref_multimetro.jpg`)
 
 Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna prueba se marca PASS sin su evidencia.
 
 | ID | Resultado esperado | Resultado observado | Estado | Evidencia |
 | --- | --- | --- | --- | --- |
-| P01 | Compila y arranca. MODE=RUN, THR=70, ALARM=0, PCT cercano a 0 | | PENDIENTE | |
+| P01 | Compila y arranca. MODE=RUN, THR=70, ALARM=0, PCT cercano a 0 | Compilación sin errores ni advertencias (text 20720, data 12, bss 2588). Con el potenciómetro al mínimo, en tres reinicios la primera respuesta a `STATUS` llegó con t = 36, 102 y 117 ms (menos de 200 ms): `MODE=RUN`, `THR=70`, `ALARM=0`, `PCT=0`, `ADC=1`. La primera telemetría sale en t = 1000 ms | PASS | `evidencias/P01_arranque.log`, `evidencias/P01_compilacion.png` |
 | P02 | Adquisición cada 100 ms, LED cada 500 ms, telemetría cada 1000 ms (±5 %) | | PENDIENTE | |
 | P03 | PCT = 100 × Vin / VREF dentro de ±3 puntos; ADC en rango; redondeo correcto | | PENDIENTE | |
 | P04 | Con THR = 70 y PCT = 60, 72, 67, 62: ALARM = 0, 1, 1, 0 | | PENDIENTE | |
@@ -55,4 +55,7 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 
 ## Observaciones y FAIL explicados
 
-(Se completa al ejecutar las pruebas.)
+- **P01, contenido del registro.** `P01_arranque.log` reúne varias ejecuciones del macro y tres reinicios en un solo archivo. Cada reinicio se ve como un salto de `t` a un valor pequeño (líneas 429, 519 y 708).
+- **P01, eco local dentro de la telemetría.** Cuatro líneas muestran el texto `STATUS` incrustado en una línea de telemetría (por ejemplo `...MODE=RUSTATUS` y luego `N;ALARM=0`, líneas 251, 495, 685 y 755). Es el eco local de Tera Term escrito en medio de la línea que estaba llegando; la placa no envía ese texto.
+- **P01, línea cortada por el reinicio.** La línea 516 (`t=5118;...;ALA`) quedó incompleta porque se pulsó RESET mientras la placa la transmitía. Durante P10 no se reinicia la placa.
+- **P01, marcas de tiempo repetidas.** Las 47 líneas de telemetría de las líneas 13 a 59 tienen la misma marca (16:14:57.09x): Tera Term estuvo detenido mientras había un cuadro de configuración abierto y registró los datos acumulados al cerrarlo. Por eso no se abren cuadros de diálogo durante una medición.

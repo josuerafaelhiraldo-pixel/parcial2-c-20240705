@@ -46,6 +46,13 @@ Cada fila de `pruebas/resultados.md` cita el archivo que la respalda.
 
 Con Local echo activado, el texto escrito puede aparecer pegado a una línea de telemetría. Es el eco local de Tera Term, no una mezcla de líneas de la placa.
 
+## Pruebas formales (Hito 4)
+
+| Archivo | Contenido |
+| --- | --- |
+| `P01_compilacion.png` | Consola de CubeIDE: `Build Finished. 0 errors, 0 warnings` y tamaños del programa |
+| `P01_arranque.log` | Registro con marcas de tiempo: `STATUS` cada 100 ms (macro `pruebas/herramientas/p01_status_rafaga.ttl`) y tres reinicios con RESET; tras cada uno la primera respuesta llega con t menor de 200 ms |
+
 ## Video de la demostración
 
 (Se agrega el enlace al cierre del proyecto.)

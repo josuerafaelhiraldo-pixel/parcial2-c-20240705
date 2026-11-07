@@ -1,0 +1,8 @@
+; P01: envia STATUS cada 100 ms durante 10 s.
+; Uso: abrir el log con marca de tiempo (Archivo > Log), ejecutar este macro
+; (Control > Macro) y pulsar el boton RESET de la placa a los 3 o 4 s.
+; Las respuestas posteriores al reinicio muestran t contando desde cero.
+for i 1 100
+  sendln 'STATUS'
+  mpause 100
+next
