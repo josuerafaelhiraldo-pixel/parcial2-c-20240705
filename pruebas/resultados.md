@@ -10,7 +10,7 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | --- | --- | --- | --- | --- |
 | P01 | Compila y arranca. MODE=RUN, THR=70, ALARM=0, PCT cercano a 0 | Compilación sin errores ni advertencias (text 20720, data 12, bss 2588). Con el potenciómetro al mínimo, en tres reinicios la primera respuesta a `STATUS` llegó con t = 36, 102 y 117 ms (menos de 200 ms): `MODE=RUN`, `THR=70`, `ALARM=0`, `PCT=0`, `ADC=1`. La primera telemetría sale en t = 1000 ms | PASS | `evidencias/P01_arranque.log`, `evidencias/P01_compilacion.png` |
 | P02 | Adquisición cada 100 ms, LED cada 500 ms, telemetría cada 1000 ms (±5 %) | | PENDIENTE | |
-| P03 | PCT = 100 × Vin / VREF dentro de ±3 puntos; ADC en rango; redondeo correcto | | PENDIENTE | |
+| P03 | PCT = 100 × Vin / VREF dentro de ±3 puntos; ADC en rango; redondeo correcto | Con VREF = 3,30 V: 0,00 V da ADC 0 y PCT 0 (esperado 0,0); 1,66 V da ADC 2066 y 2057, PCT 50 (esperado 50,3); 3,30 V da ADC 4085, PCT 100 (esperado 100,0). Diferencia máxima 0,3 puntos; ADC dentro de 0 a 4095; el redondeo coincide con 100 × ADC / 4095 | PASS | `evidencias/P03_niveles.log`, `evidencias/P03_multimetro_0pct.jpg`, `evidencias/P03_multimetro_50pct.jpg`, `evidencias/P03_multimetro_100pct.jpg` |
 | P04 | Con THR = 70 y PCT = 60, 72, 67, 62: ALARM = 0, 1, 1, 0 | | PENDIENTE | |
 | P05 | Una alternancia por pulsación; sin repetición al mantener; rebotes ignorados | | PENDIENTE | |
 | P06 | En PAUSE la alarma está apagada y las demás tareas continúan; START restaura RUN y enciende la alarma | | PENDIENTE | |
@@ -18,6 +18,16 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | P08 | Un `ERR` por línea inválida; THR y modo sin cambios | | PENDIENTE | |
 | P09 | Una respuesta por comando completo; la línea de 33 caracteres da `ERR`; el STATUS posterior funciona | | PENDIENTE | |
 | P10 | Sin bloqueos ni líneas corruptas; respuestas ≤ 100 ms; tiempos dentro de ±5 % | | PENDIENTE | |
+
+## Detalle de P03
+
+VREF+ = 3,30 V (`evidencias/vref_multimetro.jpg`). El multímetro tiene una resolución de 0,01 V. La columna «Vin según el ADC» es `ADC × 3,30 / 4095` y sirve para comprobar que la foto y la respuesta de `STATUS` corresponden al mismo punto del potenciómetro.
+
+| Nivel | Vin medido | PCT esperado | Respuesta de `STATUS` (ADC / PCT) | Vin según el ADC | Diferencia de PCT |
+| --- | --- | --- | --- | --- | --- |
+| Mínimo | 0,00 V | 0,0 | 0 / 0 y 0 / 0 | 0,000 V | 0,0 |
+| Centro | 1,66 V | 50,3 | 2066 / 50 y 2057 / 50 | 1,665 V y 1,658 V | 0,3 |
+| Máximo | 3,30 V | 100,0 | 4085 / 100 | 3,292 V | 0,0 |
 
 ## Comprobaciones parciales del Hito 1
 
@@ -59,3 +69,8 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 - **P01, eco local dentro de la telemetría.** Cuatro líneas muestran el texto `STATUS` incrustado en una línea de telemetría (por ejemplo `...MODE=RUSTATUS` y luego `N;ALARM=0`, líneas 251, 495, 685 y 755). Es el eco local de Tera Term escrito en medio de la línea que estaba llegando; la placa no envía ese texto.
 - **P01, línea cortada por el reinicio.** La línea 516 (`t=5118;...;ALA`) quedó incompleta porque se pulsó RESET mientras la placa la transmitía. Durante P10 no se reinicia la placa.
 - **P01, marcas de tiempo repetidas.** Las 47 líneas de telemetría de las líneas 13 a 59 tienen la misma marca (16:14:57.09x): Tera Term estuvo detenido mientras había un cuadro de configuración abierto y registró los datos acumulados al cerrarlo. Por eso no se abren cuadros de diálogo durante una medición.
+- **P03, texto pegado en la terminal.** La línea 6 de `P03_niveles.log` es la ruta del archivo pegada por error en Tera Term mientras se registraba; la placa respondió con un solo `ERR` (línea 7) y siguió funcionando con normalidad.
+- **P03, ajuste del potenciómetro.** Entre las líneas 40 y 99 la telemetría muestra el potenciómetro en movimiento mientras se buscaba el nivel del centro. Las respuestas de `STATUS` se pidieron con el mando quieto.
+- **P03, nivel máximo.** Tiene una sola respuesta a `STATUS`; los niveles mínimo y centro tienen dos.
+- **P03, hora de las fotos.** Las fotos se tomaron después de cerrar el registro (17:24:21, 17:29:34 y 17:30:49; el registro termina a las 17:23:03). El voltaje de cada foto coincide, dentro de la resolución de 0,01 V del multímetro, con el voltaje que corresponde al ADC de las respuestas de `STATUS` (tabla de arriba).
+- **P03, ADC en el máximo.** Con 3,30 V el ADC marca 4085, equivalente a 3,292 V: 0,008 V menos, por debajo de la resolución del multímetro.

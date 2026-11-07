@@ -52,6 +52,10 @@ Con Local echo activado, el texto escrito puede aparecer pegado a una línea de 
 | --- | --- |
 | `P01_compilacion.png` | Consola de CubeIDE: `Build Finished. 0 errors, 0 warnings` y tamaños del programa |
 | `P01_arranque.log` | Registro con marcas de tiempo: `STATUS` cada 100 ms (macro `pruebas/herramientas/p01_status_rafaga.ttl`) y tres reinicios con RESET; tras cada uno la primera respuesta llega con t menor de 200 ms |
+| `P03_niveles.log` | Registro con marcas de tiempo de los tres niveles del potenciómetro (mínimo, centro y máximo) con las respuestas de `STATUS` de cada uno |
+| `P03_multimetro_0pct.jpg` | Multímetro entre A0 y GND con el potenciómetro en el mínimo: 0,00 V |
+| `P03_multimetro_50pct.jpg` | Multímetro con el potenciómetro en el centro: 1,66 V |
+| `P03_multimetro_100pct.jpg` | Multímetro con el potenciómetro en el máximo: 3,30 V |
 
 ## Video de la demostración
 
