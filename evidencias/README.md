@@ -19,6 +19,22 @@ Cada fila de `pruebas/resultados.md` cita el archivo que la respalda.
 | `P05_boton_depurador_1_pausa.png` | Vista Live Expressions con `s_alarmMode` = `ALARM_MODE_PAUSE` tras la primera pulsación |
 | `P05_boton_depurador_2_run.png` | La misma vista con `ALARM_MODE_RUN` tras la segunda pulsación |
 
+## Archivos del Hito 2
+
+| Archivo | Contenido |
+| --- | --- |
+| `P03_depurador_0pct.png` | Live Expressions con el potenciómetro en un extremo: `s_raw` = 2, `s_pct` = 0 |
+| `P03_depurador_50pct.png` | En el centro: `s_raw` = 2048, `s_pct` = 50 |
+| `P03_depurador_100pct.png` | En el otro extremo: `s_raw` = 4094, `s_pct` = 100 |
+| `P04_depurador_1_pct60.png` | THR = 70, `s_pct` = 60: `s_alarmOn` = 0 |
+| `P04_depurador_2_pct72.png` | `s_pct` = 72: `s_alarmOn` = 1 |
+| `P04_depurador_3_pct67.png` | `s_pct` = 67, viniendo desde arriba: `s_alarmOn` sigue en 1 (banda de histéresis) |
+| `P04_depurador_4_pct62.png` | `s_pct` = 62: `s_alarmOn` = 0 |
+| `P04_led_alarma_encendido.jpg` | Foto del LED externo de alarma encendido |
+| `P04_led_alarma_apagado.jpg` | Foto del LED externo de alarma apagado |
+| `P05_boton_con_adc_1_pausa.png` | B1 pasa a PAUSE con el ADC activo (`s_raw` sigue cambiando) |
+| `P05_boton_con_adc_2_run.png` | B1 vuelve a RUN |
+
 ## Video de la demostración
 
 (Se agrega el enlace al cierre del proyecto.)
