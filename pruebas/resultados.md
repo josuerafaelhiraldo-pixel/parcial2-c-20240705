@@ -11,7 +11,7 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | P01 | Compila y arranca. MODE=RUN, THR=70, ALARM=0, PCT cercano a 0 | Compilación sin errores ni advertencias (text 20720, data 12, bss 2588). Con el potenciómetro al mínimo, en tres reinicios la primera respuesta a `STATUS` llegó con t = 36, 102 y 117 ms (menos de 200 ms): `MODE=RUN`, `THR=70`, `ALARM=0`, `PCT=0`, `ADC=1`. La primera telemetría sale en t = 1000 ms | PASS | `evidencias/P01_arranque.log`, `evidencias/P01_compilacion.png` |
 | P02 | Adquisición cada 100 ms, LED cada 500 ms, telemetría cada 1000 ms (±5 %) | | PENDIENTE | |
 | P03 | PCT = 100 × Vin / VREF dentro de ±3 puntos; ADC en rango; redondeo correcto | Con VREF = 3,30 V: 0,00 V da ADC 0 y PCT 0 (esperado 0,0); 1,66 V da ADC 2066 y 2057, PCT 50 (esperado 50,3); 3,30 V da ADC 4085, PCT 100 (esperado 100,0). Diferencia máxima 0,3 puntos; ADC dentro de 0 a 4095; el redondeo coincide con 100 × ADC / 4095 | PASS | `evidencias/P03_niveles.log`, `evidencias/P03_multimetro_0pct.jpg`, `evidencias/P03_multimetro_50pct.jpg`, `evidencias/P03_multimetro_100pct.jpg` |
-| P04 | Con THR = 70 y PCT = 60, 72, 67, 62: ALARM = 0, 1, 1, 0 | | PENDIENTE | |
+| P04 | Con THR = 70 y PCT = 60, 72, 67, 62: ALARM = 0, 1, 1, 0 | Respuestas de `STATUS`: PCT 61 da ALARM 0; PCT 74 da ALARM 1 (dos respuestas); PCT 67, llegando desde 75, da ALARM 1; PCT 62 da ALARM 0. La telemetría registra además PCT 72 con ALARM 1 y PCT 60 con ALARM 0. En los 122 registros del log ninguno incumple la regla (PCT ≥ 70 da ALARM 1; PCT < 65 da ALARM 0) | PASS | `evidencias/P04_histeresis.log` |
 | P05 | Una alternancia por pulsación; sin repetición al mantener; rebotes ignorados | | PENDIENTE | |
 | P06 | En PAUSE la alarma está apagada y las demás tareas continúan; START restaura RUN y enciende la alarma | | PENDIENTE | |
 | P07 | `THR 50` enciende, `THR 80` apaga; se aceptan 10 y 95; respuestas `OK THR=n` | | PENDIENTE | |
@@ -28,6 +28,22 @@ VREF+ = 3,30 V (`evidencias/vref_multimetro.jpg`). El multímetro tiene una reso
 | Mínimo | 0,00 V | 0,0 | 0 / 0 y 0 / 0 | 0,000 V | 0,0 |
 | Centro | 1,66 V | 50,3 | 2066 / 50 y 2057 / 50 | 1,665 V y 1,658 V | 0,3 |
 | Máximo | 3,30 V | 100,0 | 4085 / 100 | 3,292 V | 0,0 |
+
+## Detalle de P04
+
+THR = 70, así que la alarma enciende con PCT ≥ 70 y apaga con PCT < 65. Las líneas son las de `evidencias/P04_histeresis.log`.
+
+| Nivel | PCT objetivo | Respuesta de `STATUS` (PCT / ALARM) | Línea del log | Cómo se llegó |
+| --- | --- | --- | --- | --- |
+| 1 | 60 | 61 / 0 | 51 | Bajando desde 72: la telemetría muestra PCT 72 con ALARM 1 (línea 31) y PCT 60 con ALARM 0 (línea 32) |
+| 2 | 72 | 74 / 1 (dos respuestas) | 72 y 79 | Subiendo; la telemetría muestra PCT 71 con ALARM 1 (línea 67) |
+| 3 | 67 | 67 / 1 | 96 | Bajando desde 75 (línea 86): dentro de la banda de 65 a 69 conserva la alarma encendida |
+| 4 | 62 | 62 / 0 | 117 | Bajando: PCT 65 conserva ALARM 1 (línea 102) y PCT 61 ya da ALARM 0 (línea 103) |
+
+Comprobación de la banda en los dos sentidos, con la telemetría:
+
+- Subiendo, PCT 69 tiene ALARM 0 (línea 66) y PCT 71 ya tiene ALARM 1 (línea 67).
+- Bajando, PCT 69, 68, 67 y 65 tienen ALARM 1 (líneas 90 a 102) y PCT 61 tiene ALARM 0 (línea 103).
 
 ## Comprobaciones parciales del Hito 1
 
@@ -74,3 +90,6 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 - **P03, nivel máximo.** Tiene una sola respuesta a `STATUS`; los niveles mínimo y centro tienen dos.
 - **P03, hora de las fotos.** Las fotos se tomaron después de cerrar el registro (17:24:21, 17:29:34 y 17:30:49; el registro termina a las 17:23:03). El voltaje de cada foto coincide, dentro de la resolución de 0,01 V del multímetro, con el voltaje que corresponde al ADC de las respuestas de `STATUS` (tabla de arriba).
 - **P03, ADC en el máximo.** Con 3,30 V el ADC marca 4085, equivalente a 3,292 V: 0,008 V menos, por debajo de la resolución del multímetro.
+- **P04, estado inicial.** El registro empieza con el potenciómetro en PCT 81 y la alarma encendida; el primer `STATUS` (línea 24) confirma `THR=70` y `MODE=RUN`. El nivel 1 se alcanza bajando, de modo que la prueba comprueba el apagado desde la alarma encendida.
+- **P04, valores de los niveles 1 y 2.** El potenciómetro no se detuvo exactamente en PCT 60 y 72: las respuestas de `STATUS` son PCT 61 y 74, en el mismo lado del umbral. Los valores exactos 72 y 60 están en la telemetría (líneas 31 y 32).
+- **P04, `STATUS` con Enter tardío.** El texto `STATUS` de la línea 58 se escribió sin pulsar Enter; la respuesta de la línea 72 llegó al pulsarlo, unos 12 s después, y refleja ese instante (PCT 74), no el de escribirlo. La línea 53 (`STATUS}`) y la línea 75 (`STATUS` sobre texto pendiente, es decir `STATUSSTATUS`) son líneas inválidas y la placa respondió `ERR` en ambas.

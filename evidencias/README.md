@@ -56,6 +56,7 @@ Con Local echo activado, el texto escrito puede aparecer pegado a una línea de 
 | `P03_multimetro_0pct.jpg` | Multímetro entre A0 y GND con el potenciómetro en el mínimo: 0,00 V |
 | `P03_multimetro_50pct.jpg` | Multímetro con el potenciómetro en el centro: 1,66 V |
 | `P03_multimetro_100pct.jpg` | Multímetro con el potenciómetro en el máximo: 3,30 V |
+| `P04_histeresis.log` | Registro con marcas de tiempo de la histéresis con THR = 70: respuestas de `STATUS` con PCT 61, 74, 67 y 62 y la telemetría de las subidas y bajadas por la banda de 65 a 69 |
 
 ## Video de la demostración
 
