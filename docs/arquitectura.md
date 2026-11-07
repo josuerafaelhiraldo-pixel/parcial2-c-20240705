@@ -85,7 +85,7 @@ Entrada: líneas ASCII terminadas en LF o CRLF; sensibles a mayúsculas; hasta 3
 Decisiones de análisis, para que el comportamiento sea determinista:
 
 1. Se aceptan exactamente los comandos del mandato. Cualquier carácter extra (espacios al final, mayúsculas distintas, texto adicional) da `ERR`.
-2. `THR` lleva un solo espacio y luego solo dígitos decimales (de 1 a 3). Con signo, punto decimal, letras, texto adicional o sin argumento da `ERR`. Se rechazan más de 3 dígitos para no desbordar el cálculo. Después del análisis el valor debe estar entre 10 y 95.
+2. `THR` lleva un solo espacio y luego solo dígitos decimales (de 1 a 3). Con signo, punto decimal, letras, texto adicional o sin argumento da `ERR`. Se aceptan ceros a la izquierda (`THR 050` equivale a 50). Se rechazan más de 3 dígitos para no desbordar el cálculo. Después del análisis el valor debe estar entre 10 y 95.
 3. El terminador es LF; un CR justo antes del LF se descarta (CRLF) y no cuenta en el largo de la línea. Un CR en cualquier otro lugar invalida la línea (`ERR`).
 4. Un carácter no imprimible marca la línea como inválida; responde `ERR` al llegar el LF.
 5. Una línea larga se descarta completa hasta el LF, responde un solo `ERR` y la siguiente se procesa con normalidad.
@@ -93,14 +93,21 @@ Decisiones de análisis, para que el comportamiento sea determinista:
 
 ## Política de transmisión (RQ-14)
 
-- Cada respuesta se encola como una línea completa. Si no cabe, el programa principal no lee el comando siguiente hasta poder encolarla; así no se pierden respuestas.
-- La telemetría se encola solo si cabe entera. Una línea de telemetría nunca se mezcla con otra, porque nunca se encolan líneas a medias.
+- Cada respuesta se encola como una línea completa, todo o nada. Antes de leer cada byte de RX, el programa principal comprueba que la cola de TX tiene al menos 96 bytes libres (cabe la respuesta más larga). Si no, el byte espera en el búfer de RX; así no se pierden respuestas.
+- La telemetría se encola solo si cabe entera y deja además 96 bytes libres para una respuesta. Si no, ese segundo se omite y la siguiente sale a su hora, sin acumular retraso.
+- Una línea de telemetría nunca se mezcla con otra, porque nunca se encolan líneas a medias.
 - Las respuestas tienen prioridad sobre la telemetría.
+
+## Pérdida de bytes en RX
+
+Si el búfer de RX se llena, o el USART señala desbordamiento, error de trama, ruido o paridad, el contador de fallos de `console` aumenta. El programa principal lo detecta y marca como inválida la línea en curso: termina con un solo `ERR` y no ejecuta ningún comando a medias.
+
+Limitación conocida: la marca se aplica a la línea que se está armando en el momento de detectar el fallo. Si el búfer de RX tenía todavía bytes de líneas anteriores sin procesar, el `ERR` puede caer en otra línea distinta de la que perdió el byte. Con el ritmo de la prueba P10 (5 comandos por segundo) el búfer se vacía en cada pasada del programa principal; la prueba P10 comprueba que no haya fallos.
 
 ## Decisiones abiertas
 
 | Tema | Opciones | Se decide en |
 | --- | --- | --- |
 | Verificación de tiempos de P02 | Líneas de traza (`@ACQ`, `@LED`) con una bandera de compilación, activada solo durante la medición; o un pin de diagnóstico | Hito 4 |
-| Tamaño de los búferes | RX de 128 bytes y TX de 512 como punto de partida | Hito 3 |
-| Reutilización del código del primer parcial | `ringbuf`, `line` y `console` adaptados | Hito 3 |
+| Tamaño de los búferes | RX de 128 bytes y TX de 512 como punto de partida | Hito 3 (decidido: RX 128 y TX 512) |
+| Reutilización del código del primer parcial | `ringbuf`, `line` y `console` adaptados | Hito 3 (decidido: `ringbuf` y `console` del primer parcial, adaptados; `line` y `cmd` con las reglas de este mandato) |
