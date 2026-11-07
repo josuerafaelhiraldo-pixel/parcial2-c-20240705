@@ -23,10 +23,10 @@ Apertura: lunes 2 de noviembre de 2026. Cierre: domingo 8 de noviembre de 2026, 
 
 ## Hito 2: ADC y alarma
 
-- [ ] Adquisición cada 100 ms con ADC1 y conversión a porcentaje.
-- [ ] Alarma con histéresis y modos RUN / PAUSE.
-- [ ] Reglas al reanudar y al cambiar THR.
-- [ ] Prueba parcial: P03, P04.
+- [x] Adquisición cada 100 ms con ADC1 y conversión a porcentaje.
+- [x] Alarma con histéresis y modos RUN / PAUSE.
+- [x] Reglas al reanudar y al cambiar THR (la reanudación se probó en la placa; el cambio de THR se prueba en la placa con el comando del Hito 3).
+- [x] Prueba parcial: P03 y P04 con el depurador y el LED externo. La medición con multímetro y `STATUS` queda para la terminal serie.
 
 ## Hito 3: UART
 
