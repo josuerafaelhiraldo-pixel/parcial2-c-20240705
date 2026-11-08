@@ -46,7 +46,7 @@ Apertura: lunes 2 de noviembre de 2026. Cierre: domingo 8 de noviembre de 2026, 
 
 - [x] README completo (conexiones, VREF, resolución, UART, cálculo del TIMER, instrucciones).
 - [x] `pruebas/resultados.md` con PASS o FAIL y su evidencia.
-- [ ] Video breve de la demostración.
+- [x] Video de la demostración.
 - [ ] Etiqueta de la versión final y entrega en ITLAVIRTUAL antes del cierre.
 
 ## Criterio de commits
