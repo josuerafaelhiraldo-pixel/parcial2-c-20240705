@@ -1,0 +1,47 @@
+; P10: 5 comandos por segundo durante 30 s (150 comandos) con modo y umbral cambiantes.
+; Uso: poner Local echo activado, abrir el log (Archivo > Log) y ejecutar este macro
+; (Control > Macro). Dura unos 35 s. No toques el teclado ni abras menus mientras corre;
+; mueve el potenciometro de un extremo al otro, despacio, durante toda la prueba.
+;
+; Cada segundo repite cinco comandos (30 ciclos):
+;   1. STATUS
+;   2. THR n        (n = 40, 45, ..., 75 segun el ciclo)
+;   3. STATUS       (debe mostrar el umbral recien puesto)
+;   4. STOP o START (STOP en los ciclos impares, START en los pares)
+;   5. HOLA         (linea invalida: responde ERR)
+; El ultimo ciclo (el 30) termina con START y THR 70: la placa queda como al inicio. Despues
+; de una pausa de 1 s se envia un STATUS final (comando 151) para comprobar que sigue viva.
+; Requisito de partida: placa en RUN con THR 70 (recien reiniciada, por ejemplo).
+
+mpause 1000
+for i 1 30
+    sendln 'STATUS'
+    mpause 190
+
+    n = i % 8
+    n = n * 5
+    n = n + 40
+    int2str s n
+    cmd = 'THR '
+    strconcat cmd s
+    sendln cmd
+    mpause 190
+
+    sendln 'STATUS'
+    mpause 190
+
+    if i % 2 = 1 then
+        sendln 'STOP'
+    else
+        sendln 'START'
+    endif
+    mpause 190
+
+    sendln 'HOLA'
+    mpause 190
+next
+
+; Comprobacion final: la placa sigue respondiendo despues de la carga
+mpause 1000
+sendln 'STATUS'
+mpause 1500
