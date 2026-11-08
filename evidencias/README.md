@@ -69,6 +69,12 @@ Con Local echo activado, el texto escrito puede aparecer pegado a una línea de 
 | `P10_carga.log` | Registro con marcas de tiempo del macro `pruebas/herramientas/p10_carga.ttl`: 150 comandos en 29,69 s (5,02 por segundo) más un `STATUS` final, con modo y umbral cambiando y el potenciómetro en movimiento |
 | `P10_latencias.txt` | Salida de `pruebas/herramientas/analizar_p10.c` sobre `P10_carga.log`: una fila por comando con la hora del eco, la de la respuesta y la latencia, y el resumen (latencia máxima 6 ms, telemetría a 1000 ms, cero líneas corruptas) |
 
+## Verificación de la entrega
+
+| Archivo | Contenido |
+| --- | --- |
+| `Entrega_clon_limpio_compilacion.png` | Consola de CubeIDE al compilar un clon nuevo del repositorio, en otra carpeta y otro workspace: `Build Finished. 0 errors, 0 warnings` y tamaños text 20720, data 12, bss 2588, iguales a los del proyecto de trabajo |
+
 ## Video de la demostración
 
 (Se agrega el enlace al cierre del proyecto.)
