@@ -1,10 +1,10 @@
 # Resultados de las pruebas P01 a P10
 
 **Versión del firmware probada:** P01 y P03 a P09 con el commit `5e45328`. El commit `4bbb5be` agrega la traza de tiempos `APP_TRACE`, apagada por defecto: con `APP_TRACE = 0` el programa compila al mismo tamaño (text 20720, data 12, bss 2588) y las macros de traza no generan código. P02 se midió con ese commit y `APP_TRACE = 1` (text 21252, data 12, bss 2596); P10 y el firmware final usan `APP_TRACE = 0`
-**Fecha de ejecución:** desde el 7 de noviembre de 2026 (Hito 4)
+**Fecha de ejecución:** 7 de noviembre de 2026 (Hito 4)
 **VREF+ medido:** 3,30 V con multímetro entre 3V3 y GND, el 5 de noviembre de 2026 (`evidencias/vref_multimetro.jpg`)
 
-Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna prueba se marca PASS sin su evidencia.
+Las diez pruebas están en PASS y cada una tiene su evidencia en `evidencias/`. Ninguna prueba se marca PASS sin su evidencia.
 
 | ID | Resultado esperado | Resultado observado | Estado | Evidencia |
 | --- | --- | --- | --- | --- |
@@ -161,7 +161,7 @@ La latencia es la diferencia entre las marcas de tiempo del texto enviado (eco l
 
 ## Comprobaciones parciales del Hito 1
 
-Son verificaciones intermedias hechas durante el desarrollo, el 5 de noviembre de 2026. No sustituyen a las pruebas P02 y P05 finales, que se ejecutan con el firmware definitivo y la terminal serie, por eso sus estados arriba siguen en PENDIENTE.
+Son verificaciones intermedias hechas durante el desarrollo, el 5 de noviembre de 2026. No sustituyen a las pruebas P02 y P05 finales de la tabla de arriba, que se ejecutaron con el firmware definitivo y la terminal serie.
 
 | Prueba | Comprobación | Resultado | Evidencia |
 | --- | --- | --- | --- |
@@ -170,7 +170,7 @@ Son verificaciones intermedias hechas durante el desarrollo, el 5 de noviembre d
 
 ## Comprobaciones parciales del Hito 2
 
-Hechas el 6 de noviembre de 2026 con el depurador (vista Live Expressions) y el LED externo. No sustituyen a P03 y P04 finales, que se ejecutan con la terminal serie y el multímetro; por eso sus estados arriba siguen en PENDIENTE.
+Hechas el 6 de noviembre de 2026 con el depurador (vista Live Expressions) y el LED externo. No sustituyen a P03 y P04 finales de la tabla de arriba, que se ejecutaron con la terminal serie y el multímetro.
 
 | Prueba | Comprobación | Resultado | Evidencia |
 | --- | --- | --- | --- |
@@ -182,7 +182,7 @@ Hechas el 6 de noviembre de 2026 con el depurador (vista Live Expressions) y el 
 
 ## Comprobaciones parciales del Hito 3
 
-Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Transmit = LF, Local echo activado). No sustituyen a P01 y P06 a P09 finales, que se ejecutan con registros y marcas de tiempo en el Hito 4; por eso sus estados arriba siguen en PENDIENTE. Con Local echo activado, el texto escrito puede verse pegado a una línea de telemetría: es solo la pantalla de Tera Term, no la placa.
+Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Transmit = LF, Local echo activado). No sustituyen a P01 y P06 a P09 finales de la tabla de arriba, que se ejecutaron con registros y marcas de tiempo en el Hito 4. Con Local echo activado, el texto escrito puede verse pegado a una línea de telemetría: es solo la pantalla de Tera Term, no la placa.
 
 | Prueba | Comprobación | Resultado | Evidencia |
 | --- | --- | --- | --- |
