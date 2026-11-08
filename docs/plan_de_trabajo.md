@@ -38,14 +38,14 @@ Apertura: lunes 2 de noviembre de 2026. Cierre: domingo 8 de noviembre de 2026, 
 
 ## Hito 4: integración y pruebas
 
-- [ ] Carga: P10 (5 comandos por segundo durante 30 s).
-- [ ] Ejecución completa de P01 a P10 con registros y capturas.
-- [ ] Corrección de los FAIL o explicación documentada.
+- [x] Carga: P10 (5 comandos por segundo durante 30 s).
+- [x] Ejecución completa de P01 a P10 con registros y capturas.
+- [x] Corrección de los FAIL o explicación documentada (ninguna prueba terminó en FAIL; los intentos descartados están explicados en `pruebas/resultados.md`).
 
 ## Hito 5: entrega
 
-- [ ] README completo (conexiones, VREF, resolución, UART, cálculo del TIMER, instrucciones).
-- [ ] `pruebas/resultados.md` con PASS o FAIL y su evidencia.
+- [x] README completo (conexiones, VREF, resolución, UART, cálculo del TIMER, instrucciones).
+- [x] `pruebas/resultados.md` con PASS o FAIL y su evidencia.
 - [ ] Video breve de la demostración.
 - [ ] Etiqueta de la versión final y entrega en ITLAVIRTUAL antes del cierre.
 
