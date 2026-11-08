@@ -66,6 +66,8 @@ Con Local echo activado, el texto escrito puede aparecer pegado a una línea de 
 | `P07_umbral.log` | Registro con marcas de tiempo de los cambios de umbral `THR 50`, `THR 80`, `THR 10` y `THR 95` con PCT 60: respuesta `OK THR=n`, telemetría y `STATUS` posteriores con el THR nuevo y la alarma esperada |
 | `P08_errores.log` | Registro con marcas de tiempo de las líneas inválidas `THR 9`, `THR 96`, `THR abc`, `THR 50x`, `THR 50 extra` y `HOLA`: un `ERR` por línea, con THR 70 y MODE RUN sin cambios en toda la telemetría |
 | `P09_fragmentos.log` | Registro con marcas de tiempo del macro `pruebas/herramientas/p09_fragmentos.ttl`: `STATUS` fragmentado, terminadores CRLF y LF, líneas de 32 y 33 caracteres. Resultado: 5 respuestas de `STATUS` y 3 `ERR`, sin respuestas de más |
+| `P10_carga.log` | Registro con marcas de tiempo del macro `pruebas/herramientas/p10_carga.ttl`: 150 comandos en 29,69 s (5,02 por segundo) más un `STATUS` final, con modo y umbral cambiando y el potenciómetro en movimiento |
+| `P10_latencias.txt` | Salida de `pruebas/herramientas/analizar_p10.c` sobre `P10_carga.log`: una fila por comando con la hora del eco, la de la respuesta y la latencia, y el resumen (latencia máxima 6 ms, telemetría a 1000 ms, cero líneas corruptas) |
 
 ## Video de la demostración
 

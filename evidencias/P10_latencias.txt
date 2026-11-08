@@ -1,0 +1,168 @@
+Estado inicial tomado del registro: THR=70, MODE=RUN
+
+N    Comando   Hora del eco   Hora respuesta Latencia   Resultado
+1    STATUS    20:43:54.598   20:43:54.600         2 ms  OK
+2    THR 45    20:43:54.797   20:43:54.799         2 ms  OK
+3    STATUS    20:43:54.996   20:43:54.997         1 ms  OK
+4    STOP      20:43:55.196   20:43:55.198         2 ms  OK
+5    HOLA      20:43:55.398   20:43:55.401         3 ms  OK
+6    STATUS    20:43:55.599   20:43:55.603         4 ms  OK
+7    THR 50    20:43:55.797   20:43:55.801         4 ms  OK
+8    STATUS    20:43:56.000   20:43:56.003         3 ms  OK
+9    START     20:43:56.200   20:43:56.204         4 ms  OK
+10   HOLA      20:43:56.400   20:43:56.403         3 ms  OK
+11   STATUS    20:43:56.603   20:43:56.605         2 ms  OK
+12   THR 55    20:43:56.804   20:43:56.806         2 ms  OK
+13   STATUS    20:43:57.004   20:43:57.008         4 ms  OK
+14   STOP      20:43:57.204   20:43:57.207         3 ms  OK
+15   HOLA      20:43:57.406   20:43:57.408         2 ms  OK
+16   STATUS    20:43:57.605   20:43:57.607         2 ms  OK
+17   THR 60    20:43:57.807   20:43:57.809         2 ms  OK
+18   STATUS    20:43:58.008   20:43:58.010         2 ms  OK
+19   START     20:43:58.209   20:43:58.212         3 ms  OK
+20   HOLA      20:43:58.410   20:43:58.413         3 ms  OK
+21   STATUS    20:43:58.613   20:43:58.616         3 ms  OK
+22   THR 65    20:43:58.813   20:43:58.815         2 ms  OK
+23   STATUS    20:43:59.014   20:43:59.017         3 ms  OK
+24   STOP      20:43:59.213   20:43:59.215         2 ms  OK
+25   HOLA      20:43:59.413   20:43:59.415         2 ms  OK
+26   STATUS    20:43:59.612   20:43:59.615         3 ms  OK
+27   THR 70    20:43:59.812   20:43:59.815         3 ms  OK
+28   STATUS    20:44:00.012   20:44:00.015         3 ms  OK
+29   START     20:44:00.210   20:44:00.214         4 ms  OK
+30   HOLA      20:44:00.408   20:44:00.410         2 ms  OK
+31   STATUS    20:44:00.610   20:44:00.613         3 ms  OK
+32   THR 75    20:44:00.811   20:44:00.812         1 ms  OK
+33   STATUS    20:44:01.012   20:44:01.014         2 ms  OK
+34   STOP      20:44:01.212   20:44:01.214         2 ms  OK
+35   HOLA      20:44:01.413   20:44:01.415         2 ms  OK
+36   STATUS    20:44:01.612   20:44:01.615         3 ms  OK
+37   THR 40    20:44:01.813   20:44:01.816         3 ms  OK
+38   STATUS    20:44:02.013   20:44:02.016         3 ms  OK
+39   START     20:44:02.214   20:44:02.216         2 ms  OK
+40   HOLA      20:44:02.415   20:44:02.417         2 ms  OK
+41   STATUS    20:44:02.615   20:44:02.618         3 ms  OK
+42   THR 45    20:44:02.817   20:44:02.821         4 ms  OK
+43   STATUS    20:44:03.019   20:44:03.022         3 ms  OK
+44   STOP      20:44:03.217   20:44:03.219         2 ms  OK
+45   HOLA      20:44:03.417   20:44:03.420         3 ms  OK
+46   STATUS    20:44:03.616   20:44:03.618         2 ms  OK
+47   THR 50    20:44:03.816   20:44:03.818         2 ms  OK
+48   STATUS    20:44:04.016   20:44:04.020         4 ms  OK
+49   START     20:44:04.216   20:44:04.220         4 ms  OK
+50   HOLA      20:44:04.415   20:44:04.417         2 ms  OK
+51   STATUS    20:44:04.616   20:44:04.620         4 ms  OK
+52   THR 55    20:44:04.819   20:44:04.821         2 ms  OK
+53   STATUS    20:44:05.017   20:44:05.021         4 ms  OK
+54   STOP      20:44:05.217   20:44:05.221         4 ms  OK
+55   HOLA      20:44:05.416   20:44:05.418         2 ms  OK
+56   STATUS    20:44:05.616   20:44:05.619         3 ms  OK
+57   THR 60    20:44:05.817   20:44:05.819         2 ms  OK
+58   STATUS    20:44:06.017   20:44:06.019         2 ms  OK
+59   START     20:44:06.219   20:44:06.222         3 ms  OK
+60   HOLA      20:44:06.424   20:44:06.425         1 ms  OK
+61   STATUS    20:44:06.619   20:44:06.621         2 ms  OK
+62   THR 65    20:44:06.821   20:44:06.823         2 ms  OK
+63   STATUS    20:44:07.019   20:44:07.022         3 ms  OK
+64   STOP      20:44:07.218   20:44:07.220         2 ms  OK
+65   HOLA      20:44:07.404   20:44:07.410         6 ms  OK
+66   STATUS    20:44:07.605   20:44:07.608         3 ms  OK
+67   THR 70    20:44:07.807   20:44:07.810         3 ms  OK
+68   STATUS    20:44:08.006   20:44:08.008         2 ms  OK
+69   START     20:44:08.208   20:44:08.211         3 ms  OK
+70   HOLA      20:44:08.412   20:44:08.414         2 ms  OK
+71   STATUS    20:44:08.610   20:44:08.613         3 ms  OK
+72   THR 75    20:44:08.809   20:44:08.812         3 ms  OK
+73   STATUS    20:44:09.010   20:44:09.012         2 ms  OK
+74   STOP      20:44:09.211   20:44:09.214         3 ms  OK
+75   HOLA      20:44:09.398   20:44:09.400         2 ms  OK
+76   STATUS    20:44:09.595   20:44:09.596         1 ms  OK
+77   THR 40    20:44:09.797   20:44:09.801         4 ms  OK
+78   STATUS    20:44:09.996   20:44:09.999         3 ms  OK
+79   START     20:44:10.199   20:44:10.201         2 ms  OK
+80   HOLA      20:44:10.389   20:44:10.390         1 ms  OK
+81   STATUS    20:44:10.587   20:44:10.589         2 ms  OK
+82   THR 45    20:44:10.786   20:44:10.788         2 ms  OK
+83   STATUS    20:44:10.986   20:44:10.989         3 ms  OK
+84   STOP      20:44:11.182   20:44:11.186         4 ms  OK
+85   HOLA      20:44:11.386   20:44:11.388         2 ms  OK
+86   STATUS    20:44:11.587   20:44:11.590         3 ms  OK
+87   THR 50    20:44:11.787   20:44:11.789         2 ms  OK
+88   STATUS    20:44:11.989   20:44:11.991         2 ms  OK
+89   START     20:44:12.187   20:44:12.191         4 ms  OK
+90   HOLA      20:44:12.378   20:44:12.379         1 ms  OK
+91   STATUS    20:44:12.574   20:44:12.577         3 ms  OK
+92   THR 55    20:44:12.775   20:44:12.778         3 ms  OK
+93   STATUS    20:44:12.976   20:44:12.980         4 ms  OK
+94   STOP      20:44:13.179   20:44:13.182         3 ms  OK
+95   HOLA      20:44:13.366   20:44:13.368         2 ms  OK
+96   STATUS    20:44:13.563   20:44:13.565         2 ms  OK
+97   THR 60    20:44:13.766   20:44:13.769         3 ms  OK
+98   STATUS    20:44:13.967   20:44:13.969         2 ms  OK
+99   START     20:44:14.168   20:44:14.171         3 ms  OK
+100  HOLA      20:44:14.371   20:44:14.372         1 ms  OK
+101  STATUS    20:44:14.566   20:44:14.569         3 ms  OK
+102  THR 65    20:44:14.767   20:44:14.770         3 ms  OK
+103  STATUS    20:44:14.967   20:44:14.969         2 ms  OK
+104  STOP      20:44:15.166   20:44:15.169         3 ms  OK
+105  HOLA      20:44:15.356   20:44:15.358         2 ms  OK
+106  STATUS    20:44:15.553   20:44:15.556         3 ms  OK
+107  THR 70    20:44:15.753   20:44:15.755         2 ms  OK
+108  STATUS    20:44:15.954   20:44:15.956         2 ms  OK
+109  START     20:44:16.154   20:44:16.156         2 ms  OK
+110  HOLA      20:44:16.358   20:44:16.359         1 ms  OK
+111  STATUS    20:44:16.555   20:44:16.558         3 ms  OK
+112  THR 75    20:44:16.756   20:44:16.760         4 ms  OK
+113  STATUS    20:44:16.958   20:44:16.961         3 ms  OK
+114  STOP      20:44:17.158   20:44:17.161         3 ms  OK
+115  HOLA      20:44:17.345   20:44:17.350         5 ms  OK
+116  STATUS    20:44:17.543   20:44:17.545         2 ms  OK
+117  THR 40    20:44:17.744   20:44:17.746         2 ms  OK
+118  STATUS    20:44:17.947   20:44:17.949         2 ms  OK
+119  START     20:44:18.145   20:44:18.148         3 ms  OK
+120  HOLA      20:44:18.335   20:44:18.336         1 ms  OK
+121  STATUS    20:44:18.532   20:44:18.535         3 ms  OK
+122  THR 45    20:44:18.732   20:44:18.735         3 ms  OK
+123  STATUS    20:44:18.933   20:44:18.936         3 ms  OK
+124  STOP      20:44:19.135   20:44:19.138         3 ms  OK
+125  HOLA      20:44:19.324   20:44:19.326         2 ms  OK
+126  STATUS    20:44:19.523   20:44:19.525         2 ms  OK
+127  THR 50    20:44:19.724   20:44:19.726         2 ms  OK
+128  STATUS    20:44:19.921   20:44:19.924         3 ms  OK
+129  START     20:44:20.124   20:44:20.127         3 ms  OK
+130  HOLA      20:44:20.328   20:44:20.329         1 ms  OK
+131  STATUS    20:44:20.527   20:44:20.530         3 ms  OK
+132  THR 55    20:44:20.727   20:44:20.730         3 ms  OK
+133  STATUS    20:44:20.927   20:44:20.929         2 ms  OK
+134  STOP      20:44:21.128   20:44:21.131         3 ms  OK
+135  HOLA      20:44:21.315   20:44:21.317         2 ms  OK
+136  STATUS    20:44:21.511   20:44:21.513         2 ms  OK
+137  THR 60    20:44:21.711   20:44:21.714         3 ms  OK
+138  STATUS    20:44:21.910   20:44:21.913         3 ms  OK
+139  START     20:44:22.112   20:44:22.116         4 ms  OK
+140  HOLA      20:44:22.315   20:44:22.316         1 ms  OK
+141  STATUS    20:44:22.514   20:44:22.518         4 ms  OK
+142  THR 65    20:44:22.711   20:44:22.714         3 ms  OK
+143  STATUS    20:44:22.911   20:44:22.913         2 ms  OK
+144  STOP      20:44:23.112   20:44:23.115         3 ms  OK
+145  HOLA      20:44:23.301   20:44:23.302         1 ms  OK
+146  STATUS    20:44:23.497   20:44:23.500         3 ms  OK
+147  THR 70    20:44:23.697   20:44:23.700         3 ms  OK
+148  STATUS    20:44:23.899   20:44:23.901         2 ms  OK
+149  START     20:44:24.100   20:44:24.103         3 ms  OK
+150  HOLA      20:44:24.290   20:44:24.291         1 ms  OK
+151  STATUS    20:44:25.501   20:44:25.504         3 ms  OK
+
+==== Resumen ====
+Comandos enviados: 151; respuestas pareadas: 151; sin respuesta o de mas: 0; respuestas inesperadas incluidas en ese conteo
+Latencia (eco a respuesta, reloj del PC): minima 1 ms, mediana 3 ms, media 2.6 ms, percentil 95 4 ms, maxima 6 ms
+Respuestas con latencia mayor de 100 ms: 0
+STATUS cuyo THR o MODE no coincide con los comandos anteriores: 0
+Lineas de estado revisadas (telemetria y STATUS): 147; invariantes incumplidas (PCT, alarma en PAUSE, alarma con la histeresis): 0
+Lineas reunidas tras un eco local en medio: 1; STATUS atendidos con la telemetria en el mismo milisegundo: 0
+Lineas corruptas o desconocidas: 0 (recortes en la primera o la ultima linea del registro, aceptados: 0)
+Telemetria: 86 lineas; intervalo con el reloj de la placa de 1000 a 1000 ms; intervalos distintos de 1000 ms: 0; fuera de +-5 %: 0
+Reloj de la placa contra reloj del PC (telemetria): placa 85000 ms, PC 84406 ms, diferencia +0.704 %
+Ritmo de la carga: 150 comandos en 29.69 s (del primero al 150); 5.02 comandos por segundo
+
+RESULTADO: PASS

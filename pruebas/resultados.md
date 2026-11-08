@@ -17,7 +17,7 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | P07 | `THR 50` enciende, `THR 80` apaga; se aceptan 10 y 95; respuestas `OK THR=n` | Con PCT 60 y la alarma apagada: `THR 50` da `OK THR=50` y ALARM 1; `THR 80` da `OK THR=80` y ALARM 0; `THR 10` da `OK THR=10` y ALARM 1; `THR 95` da `OK THR=95` y ALARM 0. En cada caso, la telemetría siguiente y el `STATUS` posterior muestran el THR nuevo y la alarma esperada | PASS | `evidencias/P07_umbral.log` |
 | P08 | Un `ERR` por línea inválida; THR y modo sin cambios | Las siete líneas inválidas enviadas (`THR 9`, `THR 96`, `THR abc`, `THR 50x`, `THR 50 extra` y `HOLA` dos veces) dieron un solo `ERR` cada una: siete `ERR` y ningún `OK`. Las 70 líneas de telemetría y respuestas del registro muestran siempre THR 70, MODE RUN y ALARM 0, y el `STATUS` final responde con normalidad (t=10504684). Una línea vacía no produjo respuesta | PASS | `evidencias/P08_errores.log` |
 | P09 | Una respuesta por comando completo; la línea de 33 caracteres da `ERR`; el STATUS posterior funciona | Con el macro `p09_fragmentos.ttl`: `STA` y, 2 s después, `TUS` con LF dieron una sola respuesta de `STATUS`, y ninguna durante la pausa. `STATUS` con CRLF y con LF dieron una respuesta cada uno. La línea de 32 caracteres, la de 33 con LF y la de 33 con CRLF dieron un solo `ERR` cada una. Cada `STATUS` posterior a un error respondió con normalidad. Total: 5 respuestas de `STATUS` y 3 `ERR`, ninguna respuesta de más. La telemetría siguió sin saltos (t de 1000 en 1000) | PASS | `evidencias/P09_fragmentos.log`, `pruebas/herramientas/p09_fragmentos.ttl` |
-| P10 | Sin bloqueos ni líneas corruptas; respuestas ≤ 100 ms; tiempos dentro de ±5 % | | PENDIENTE | |
+| P10 | Sin bloqueos ni líneas corruptas; respuestas ≤ 100 ms; tiempos dentro de ±5 % | Con el firmware final (`APP_TRACE = 0`), 150 comandos en 29,69 s (5,02 por segundo) más un `STATUS` final, con el modo y el umbral cambiando y el potenciómetro en movimiento: los 151 comandos tuvieron una sola respuesta del tipo esperado; la latencia (eco a respuesta) fue de 1 a 6 ms, mediana 3 ms, ninguna sobre 100 ms; cada `STATUS` mostró el `THR` y el `MODE` esperados; ninguna línea corrupta; la telemetría salió cada 1000 ms exactos con el reloj de la placa, sin huecos; el `STATUS` final respondió normalmente | PASS | `evidencias/P10_carga.log`, `evidencias/P10_latencias.txt`, `pruebas/herramientas/p10_carga.ttl`, `pruebas/herramientas/analizar_p10.c` |
 
 ## Detalle de P03
 
@@ -135,6 +135,30 @@ Firmware: commit `4bbb5be` con `APP_TRACE = 1` (`evidencias/P02_compilacion_traz
 - LD2 cambió 162 veces alternando 1 y 0, con cero repetidos seguidos. El nivel se lee del pin después de cambiarlo.
 - Reloj de la placa contra reloj del PC, con la telemetría de la primera a la última línea: la placa avanzó 80000 ms y el PC midió 79451 ms (la placa va un 0,691 % más rápido).
 
+## Detalle de P10
+
+Firmware: el final, con `APP_TRACE = 0` (text 20720, data 12, bss 2588). Procedimiento: RESET de la placa (RUN, THR 70), registro con marcas de tiempo, Local echo activado y ejecución de `pruebas/herramientas/p10_carga.ttl`, que envía 30 ciclos de 5 comandos, uno cada 200 ms, y un `STATUS` final. Durante la prueba se movió el potenciómetro de un extremo al otro (PCT de 99 a 0 y de nuevo a 99). La salida de `pruebas/herramientas/analizar_p10.c` sobre el registro está en `evidencias/P10_latencias.txt`, con una fila por comando.
+
+| Comando | Cantidad | Respuesta esperada | Latencia mínima | Latencia media | Latencia máxima |
+| --- | --- | --- | --- | --- | --- |
+| `STATUS` | 61 | línea de estado | 1 ms | 2,7 ms | 4 ms |
+| `THR n` (n de 40 a 75) | 30 | `OK THR=n` | 1 ms | 2,6 ms | 4 ms |
+| `STOP` | 15 | `OK PAUSE` | 2 ms | 2,8 ms | 4 ms |
+| `START` | 15 | `OK RUN` | 2 ms | 3,1 ms | 4 ms |
+| `HOLA` (línea inválida) | 30 | `ERR` | 1 ms | 2,0 ms | 6 ms |
+| Total | 151 | una respuesta cada uno | 1 ms | 2,6 ms | 6 ms |
+
+La latencia es la diferencia entre las marcas de tiempo del texto enviado (eco local) y de la respuesta, ambas del reloj del PC. Resultados del análisis:
+
+- Comandos: 151 (150 de la carga y el `STATUS` final); respuestas: 151, ninguna de más ni de menos. El tipo de cada respuesta coincide con el comando (`OK THR=n` con el n enviado).
+- Ritmo: los 150 comandos de la carga ocuparon 29,69 s, es decir 5,02 comandos por segundo.
+- Latencia: mediana 3 ms, percentil 95 de 4 ms, máxima 6 ms. Ninguna respuesta pasó de 100 ms.
+- Estado: en cada `STATUS`, `THR` y `MODE` coinciden con los comandos anteriores (cero diferencias).
+- Coherencia: en las 147 líneas de estado (telemetría y `STATUS`), PCT coincide con el redondeo de 100 × ADC / 4095, la alarma está apagada en PAUSE y respeta la histéresis con el THR vigente (cero incumplimientos). La alarma cambió de estado varias veces durante la prueba.
+- Líneas corruptas o desconocidas: cero.
+- Telemetría: 86 líneas; todos los intervalos son de 1000 ms con el reloj de la placa (cero fuera de ±5 %, cero huecos). Con el reloj del PC, la placa avanzó 85000 ms mientras el PC midió 84406 ms (la placa va 0,70 % más rápido, igual que en P02).
+- Los periodos de 100 ms (ADC) y 500 ms (LED) bajo carga no se midieron en P10 porque el firmware final no tiene traza; se midieron en P02. La telemetría sí se mide aquí, y es la tarea que comparte la cola de TX con las respuestas.
+
 ## Comprobaciones parciales del Hito 1
 
 Son verificaciones intermedias hechas durante el desarrollo, el 5 de noviembre de 2026. No sustituyen a las pruebas P02 y P05 finales, que se ejecutan con el firmware definitivo y la terminal serie, por eso sus estados arriba siguen en PENDIENTE.
@@ -199,3 +223,8 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 - **P02, reloj de la placa.** El reloj de la placa va 0,69 % más rápido que el del PC. Es muy inferior a la tolerancia del enunciado (±5 %) y no se corrigió.
 - **P02, inicio del registro.** El registro empieza en `t=143300`, a mitad de un segundo, porque se abrió con la placa ya en marcha. No hay reinicios ni diálogos abiertos durante la medición.
 - **P02, primer intento descartado.** El primer registro (20:13) se tomó con la placa corriendo todavía el firmware sin traza, porque la versión compilada no se había cargado; solo tenía telemetría y se borró. Las mediciones válidas son las de `P02_tiempos.log`.
+- **P10, primer intento descartado.** La primera ejecución dio 4,64 comandos por segundo (pausa de 190 ms en el macro, que con el tiempo de envío y la resolución del temporizador de Windows daba unos 215 ms por comando). Todo lo demás salió bien en ese intento (151 respuestas, latencia máxima de 9 ms, estado correcto, telemetría a 1000 ms), pero no llegaba a 5 comandos por segundo. Se bajó la pausa del macro a 176 ms y se repitió; el registro de esa primera ejecución no se conservó.
+- **P10, marcas de tiempo repetidas.** Las 41 líneas de telemetría de las líneas 5 a 45 de `P10_carga.log` tienen la misma marca (20:43:53.54x y .56x): Tera Term estuvo detenido unos 41 s con el cuadro de selección del macro abierto y registró los datos acumulados al cerrarlo. No falta ninguna línea (`t` avanza de 1000 en 1000). Las marcas de los comandos, que son las que sirven para medir la latencia, empiezan en la línea 47.
+- **P10, eco local en la telemetría.** En la línea 187 el eco de `HOLA` cayó en mitad de una línea de telemetría (`t=73000;ADC=2130;PCT=52;THR=65;MODE=PA` + `HOLA`, y el resto `USE;ALARM=0` en la línea 188). Es el eco local de Tera Term, no una línea corrupta de la placa: el analizador reunió los dos trozos y la línea completa es válida. La respuesta `ERR` llegó aparte, en la línea 189.
+- **P10, fin del registro.** Después del `STATUS` final (línea 378) el registro siguió abierto unos 9 s más, con telemetría normal (hasta `t=100000`). La placa quedó en RUN con THR 70, como el último ciclo del macro.
+- **P10, qué comprueba cada parte.** El macro prueba que ninguna respuesta se pierde ni se mezcla con otra línea con 5 comandos por segundo, incluidas las líneas inválidas, los cambios de modo y de umbral. Los casos extremos (cola de TX llena y pérdida de bytes de RX) no se pueden provocar con Tera Term a 5 comandos por segundo; la política que los cubre está descrita en `docs/arquitectura.md` (secciones «Política de transmisión» y «Pérdida de bytes en RX»).
