@@ -7,7 +7,7 @@ La base temporal es **TIM6**, un temporizador básico de 16 bits sin pines de en
 | Etapa | Valor |
 | --- | --- |
 | Fuente | HSI, 16 MHz |
-| PLL | Los factores que genera CubeMX para 84 MHz (por ejemplo M = 16, N = 336, P = 4); se confirman en `SystemClock_Config` al generar el proyecto |
+| PLL | M = 16, N = 336, P = 4: 16 MHz / 16 × 336 / 4 = 84 MHz (confirmado en `SystemClock_Config`, `main.c`, con fuente `RCC_PLLSOURCE_HSI`) |
 | HCLK (SYSCLK) | 84 MHz |
 | APB1 (prescaler /2) | PCLK1 = 42 MHz |
 | Reloj de TIM6 | 84 MHz (los temporizadores de APB1 reciben el doble de PCLK1 cuando el prescaler de APB1 es distinto de 1) |
