@@ -38,6 +38,27 @@ El búfer circular, el armado de líneas y la consola siguen el diseño del prim
 | Telemetría | 1000 ms | Encola la línea de estado |
 | Antirrebote | 1 ms | Muestrea PC13 y avanza el filtro |
 
+## Traza de tiempos para P02
+
+Los periodos de 100 ms (ADC) y 500 ms (LED) no se ven en la telemetría, que sale cada 1000 ms. Para medirlos con la terminal serie, `app_config.h` define `APP_TRACE`:
+
+| Valor | Efecto |
+| --- | --- |
+| `0` (valor final) | Las líneas de traza no se compilan. Las macros `TRACE_ACQ` y `TRACE_LED` se expanden a `((void)0)` y el programa es el mismo que sin la traza (mismo tamaño: text 20720, data 12, bss 2588) |
+| `1` | El compilador avisa con `#warning` y el programa escribe dos líneas más, además de la telemetría |
+
+Con `APP_TRACE = 1`:
+
+| Línea | Cuándo sale | Ejemplo |
+| --- | --- | --- |
+| `@ACQ;t=<ms>` | Cada vez que `main` recoge una muestra del ADC | `@ACQ;t=12300` |
+| `@LED;t=<ms>;LD2=<0\|1>` | Cada vez que cambia LD2; el nivel se lee del pin | `@LED;t=12500;LD2=1` |
+
+- `t` es el contador de milisegundos de TIM6, el mismo que usa la telemetría. Los intervalos salen así del reloj de la placa, sin el retraso variable del USB y de Tera Term.
+- Como referencia independiente, `pruebas/herramientas/medir_tiempos.c` compara ese reloj con las marcas de tiempo del PC en toda la ventana del registro.
+- Cada línea de traza se encola completa con `Console_WriteBytes` (todo o nada). Si la cola de TX tiene menos de 192 bytes libres, la traza se omite y se cuenta, de modo que nunca quita sitio a una respuesta ni a la telemetría.
+- La traza solo se activa para la prueba P02. Todas las demás pruebas (P01, P03 a P10) se ejecutan con `APP_TRACE = 0`.
+
 ## Máquina de estados y alarma (RQ-06 a RQ-08)
 
 Estados: RUN y PAUSE. Se pasa de uno a otro con una pulsación válida del botón o con `START` y `STOP`. La alarma es una salida de un solo bit con las reglas siguientes. Si todavía no hay muestra válida, no se decide nada.
@@ -108,6 +129,6 @@ Limitación conocida: la marca se aplica a la línea que se está armando en el 
 
 | Tema | Opciones | Se decide en |
 | --- | --- | --- |
-| Verificación de tiempos de P02 | Líneas de traza (`@ACQ`, `@LED`) con una bandera de compilación, activada solo durante la medición; o un pin de diagnóstico | Hito 4 |
+| Verificación de tiempos de P02 | Líneas de traza (`@ACQ`, `@LED`) con una bandera de compilación, activada solo durante la medición; o un pin de diagnóstico | Hito 4 (decidido: traza con `APP_TRACE`, apagada en el firmware final) |
 | Tamaño de los búferes | RX de 128 bytes y TX de 512 como punto de partida | Hito 3 (decidido: RX 128 y TX 512) |
 | Reutilización del código del primer parcial | `ringbuf`, `line` y `console` adaptados | Hito 3 (decidido: `ringbuf` y `console` del primer parcial, adaptados; `line` y `cmd` con las reglas de este mandato) |
