@@ -4,7 +4,7 @@
 - **Placa:** STM32 NUCLEO-F446RE (microcontrolador STM32F446RE, Cortex-M4)
 - **Versión final:** etiqueta `v1.0`. El firmware no cambia desde el commit `4bbb5be`; los commits posteriores son documentación, herramientas de prueba y evidencias.
 - **Resultado de las pruebas:** P01 a P10 en PASS, cada una con su evidencia (`pruebas/resultados.md`).
-- **Video de la demostración:** enlace en `evidencias/README.md`, sección «Video de la demostración».
+- **Video de la demostración:** https://youtu.be/5uD3u4qY610 (también en `evidencias/README.md`, sección «Video de la demostración»).
 
 Un potenciómetro representa el nivel de una variable de proceso. El firmware lo adquiere con el ADC, ejecuta tareas periódicas con un TIMER de hardware, controla dos LED y un pulsador con GPIO, y se comunica con la computadora por UART. Todo corre en un único firmware, sin RTOS y sin retardos bloqueantes.
 
