@@ -11,12 +11,14 @@
 ;   5. HOLA         (linea invalida: responde ERR)
 ; El ultimo ciclo (el 30) termina con START y THR 70: la placa queda como al inicio. Despues
 ; de una pausa de 1 s se envia un STATUS final (comando 151) para comprobar que sigue viva.
+; Ritmo: cada comando ocupa unos 200 ms (pausa de 176 ms mas el tiempo de envio y la
+; resolucion del temporizador de Windows). Con una pausa de 190 ms salieron 4,64 comandos por segundo.
 ; Requisito de partida: placa en RUN con THR 70 (recien reiniciada, por ejemplo).
 
 mpause 1000
 for i 1 30
     sendln 'STATUS'
-    mpause 190
+    mpause 176
 
     n = i % 8
     n = n * 5
@@ -25,20 +27,20 @@ for i 1 30
     cmd = 'THR '
     strconcat cmd s
     sendln cmd
-    mpause 190
+    mpause 176
 
     sendln 'STATUS'
-    mpause 190
+    mpause 176
 
     if i % 2 = 1 then
         sendln 'STOP'
     else
         sendln 'START'
     endif
-    mpause 190
+    mpause 176
 
     sendln 'HOLA'
-    mpause 190
+    mpause 176
 next
 
 ; Comprobacion final: la placa sigue respondiendo despues de la carga
