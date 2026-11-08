@@ -55,6 +55,15 @@
 #define APP_TX_BUF_SIZE         512U    /* potencia de 2; guarda como maximo 511 bytes */
 #define APP_LINE_OUT_MAX        96U     /* mayor linea de salida: telemetria o respuesta */
 
+/* ---- Traza de tiempos para la prueba P02 (apagada por defecto) ---- */
+/* Con APP_TRACE = 1 el programa escribe por la UART una linea "@ACQ;t=<ms>" cada vez que
+ * entrega una muestra del ADC y "@LED;t=<ms>;LD2=<0|1>" cada vez que cambia el LED de actividad.
+ * Con APP_TRACE = 0 (valor final) esas lineas no se compilan y el codigo generado es el mismo.
+ * Solo se activa para medir P02; ver docs/arquitectura.md. */
+#ifndef APP_TRACE
+#define APP_TRACE               0
+#endif
+
 /* ---- Comprobaciones en tiempo de compilacion ---- */
 _Static_assert(APP_DEBOUNCE_MS >= 30U, "RQ-06: el antirrebote debe ser de al menos 30 ms");
 _Static_assert((APP_DEBOUNCE_MS % APP_BTN_SAMPLE_MS) == 0U, "el antirrebote debe ser multiplo del muestreo");
