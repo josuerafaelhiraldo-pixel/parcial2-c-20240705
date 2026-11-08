@@ -1,6 +1,6 @@
 # Resultados de las pruebas P01 a P10
 
-**Versión del firmware probada:** commit `5e45328` (último cambio de firmware; los commits posteriores solo tocan documentación y pruebas)
+**Versión del firmware probada:** P01 y P03 a P09 con el commit `5e45328`. El commit `4bbb5be` agrega la traza de tiempos `APP_TRACE`, apagada por defecto: con `APP_TRACE = 0` el programa compila al mismo tamaño (text 20720, data 12, bss 2588) y las macros de traza no generan código. P02 se midió con ese commit y `APP_TRACE = 1` (text 21252, data 12, bss 2596); P10 y el firmware final usan `APP_TRACE = 0`
 **Fecha de ejecución:** desde el 7 de noviembre de 2026 (Hito 4)
 **VREF+ medido:** 3,30 V con multímetro entre 3V3 y GND, el 5 de noviembre de 2026 (`evidencias/vref_multimetro.jpg`)
 
@@ -9,7 +9,7 @@ Un estado PENDIENTE significa que la prueba todavía no se ejecutó. Ninguna pru
 | ID | Resultado esperado | Resultado observado | Estado | Evidencia |
 | --- | --- | --- | --- | --- |
 | P01 | Compila y arranca. MODE=RUN, THR=70, ALARM=0, PCT cercano a 0 | Compilación sin errores ni advertencias (text 20720, data 12, bss 2588). Con el potenciómetro al mínimo, en tres reinicios la primera respuesta a `STATUS` llegó con t = 36, 102 y 117 ms (menos de 200 ms): `MODE=RUN`, `THR=70`, `ALARM=0`, `PCT=0`, `ADC=1`. La primera telemetría sale en t = 1000 ms | PASS | `evidencias/P01_arranque.log`, `evidencias/P01_compilacion.png` |
-| P02 | Adquisición cada 100 ms, LED cada 500 ms, telemetría cada 1000 ms (±5 %) | | PENDIENTE | |
+| P02 | Adquisición cada 100 ms, LED cada 500 ms, telemetría cada 1000 ms (±5 %) | Con la traza `APP_TRACE = 1` y un registro de 80 s (808 `@ACQ`, 162 `@LED`, 81 telemetrías), los intervalos con el reloj de la placa son de 100 ms, 500 ms y 1000 ms exactos (0,00 % de desviación; todos dentro de ±5 %). Con el reloj del PC, los periodos medios son 99,31, 496,55 y 993,14 ms (0,69 % menos que los nominales, dentro de ±5 %). LD2 alterna 1, 0, 1, 0 en los 162 cambios sin repetirse | PASS | `evidencias/P02_tiempos.log`, `evidencias/P02_intervalos.txt`, `evidencias/P02_compilacion_traza.png` |
 | P03 | PCT = 100 × Vin / VREF dentro de ±3 puntos; ADC en rango; redondeo correcto | Con VREF = 3,30 V: 0,00 V da ADC 0 y PCT 0 (esperado 0,0); 1,66 V da ADC 2066 y 2057, PCT 50 (esperado 50,3); 3,30 V da ADC 4085, PCT 100 (esperado 100,0). Diferencia máxima 0,3 puntos; ADC dentro de 0 a 4095; el redondeo coincide con 100 × ADC / 4095 | PASS | `evidencias/P03_niveles.log`, `evidencias/P03_multimetro_0pct.jpg`, `evidencias/P03_multimetro_50pct.jpg`, `evidencias/P03_multimetro_100pct.jpg` |
 | P04 | Con THR = 70 y PCT = 60, 72, 67, 62: ALARM = 0, 1, 1, 0 | Respuestas de `STATUS`: PCT 61 da ALARM 0; PCT 74 da ALARM 1 (dos respuestas); PCT 67, llegando desde 75, da ALARM 1; PCT 62 da ALARM 0. La telemetría registra además PCT 72 con ALARM 1 y PCT 60 con ALARM 0. En los 122 registros del log ninguno incumple la regla (PCT ≥ 70 da ALARM 1; PCT < 65 da ALARM 0) | PASS | `evidencias/P04_histeresis.log` |
 | P05 | Una alternancia por pulsación; sin repetición al mantener; rebotes ignorados | Cinco pulsaciones separadas: MODE pasó PAUSE, RUN, PAUSE, RUN, PAUSE y cada `STATUS` coincidió con la telemetría. Una pulsación mantenida unos 5 s: una sola alternancia (PAUSE a RUN en t=8146000) y ninguna más en los 14 s siguientes. El rebote natural de B1 no produjo alternancias extra | PASS | `evidencias/P05_boton.log`, `evidencias/P05_boton_mantenido.log` |
@@ -121,6 +121,20 @@ Las líneas son las de `evidencias/P09_fragmentos.log`. Las respuestas de `STATU
 
 Resumen: 5 respuestas de `STATUS` (líneas 24, 29, 33, 45 y 54) y 3 `ERR` (líneas 37, 41 y 50). Las 52 líneas de telemetría del registro (t=10873000 a t=10924000) están completas y sin saltos.
 
+## Detalle de P02
+
+Firmware: commit `4bbb5be` con `APP_TRACE = 1` (`evidencias/P02_compilacion_traza.png`: 0 errores, 1 advertencia que avisa de la traza). Las cifras son la salida de `pruebas/herramientas/medir_tiempos.c` sobre `evidencias/P02_tiempos.log`, guardada en `evidencias/P02_intervalos.txt`. El registro dura 80,1 s (del 7 de noviembre de 2026, 20:19:42 a 20:21:02).
+
+| Tarea | Periodo nominal | Límite de ±5 % | Líneas | Intervalos con el reloj de la placa (mínimo, medio, máximo) | Periodo medio con el reloj del PC |
+| --- | --- | --- | --- | --- | --- |
+| ADC (`@ACQ`) | 100 ms | 95 a 105 ms | 808 | 100, 100,00 y 100 ms | 99,31 ms (−0,694 %) |
+| LED LD2 (`@LED`) | 500 ms | 475 a 525 ms | 162 | 500, 500,00 y 500 ms | 496,55 ms (−0,689 %) |
+| Telemetría | 1000 ms | 950 a 1050 ms | 81 | 1000, 1000,00 y 1000 ms | 993,14 ms (−0,686 %) |
+
+- Ningún intervalo de la placa sale de ±5 % (cero fuera de límite en las tres tareas): no falta ninguna línea de traza ni de telemetría.
+- LD2 cambió 162 veces alternando 1 y 0, con cero repetidos seguidos. El nivel se lee del pin después de cambiarlo.
+- Reloj de la placa contra reloj del PC, con la telemetría de la primera a la última línea: la placa avanzó 80000 ms y el PC midió 79451 ms (la placa va un 0,691 % más rápido).
+
 ## Comprobaciones parciales del Hito 1
 
 Son verificaciones intermedias hechas durante el desarrollo, el 5 de noviembre de 2026. No sustituyen a las pruebas P02 y P05 finales, que se ejecutan con el firmware definitivo y la terminal serie, por eso sus estados arriba siguen en PENDIENTE.
@@ -180,3 +194,8 @@ Hechas el 7 de noviembre de 2026 con Tera Term (COM8, 115200 8N1, New-line Trans
 - **P09, marcas de tiempo repetidas.** Las 14 líneas de telemetría de las líneas 7 a 20 tienen la misma marca (19:18:21.23x) porque Tera Term estuvo detenido unos 14 s con el cuadro de selección del macro abierto y registró los datos acumulados al cerrarlo. No se perdió ninguna línea: `t` avanza de 1000 en 1000 de la línea 1 a la 70. Las marcas del macro (desde la línea 21) son las válidas para los intervalos de la tabla.
 - **P09, líneas en blanco.** Las líneas 28 y 49 aparecen solo en los pasos con CRLF y son el eco local del retorno de carro y del salto de línea enviados; en los pasos con LF no hay línea en blanco. La placa no envía líneas vacías.
 - **P09, eco pegado.** En la línea 21 `STA` quedó pegado al inicio de una línea de telemetría (`STAt=10893000;...`) por el eco local de Tera Term; la telemetría llegó completa.
+- **P02, qué marca cada traza.** `@ACQ` se escribe cuando `main` recoge la muestra, no cuando se inicia la conversión; la conversión termina en microsegundos, por lo que ambos instantes coinciden dentro del milisegundo. `@LED` se escribe justo después de cambiar el LED, con el nivel que quedó en el pin.
+- **P02, intervalos sueltos del PC.** Con el reloj del PC, cada intervalo suelto varía más que con el de la placa: de 84 a 115 ms en `@ACQ`, de 482 a 511 ms en `@LED` y de 979 a 1006 ms en la telemetría. Es el retraso variable del USB (ST-LINK) y de Tera Term, que reparte las líneas del puerto serie en bloques. Por eso el criterio de P02 usa los intervalos del reloj de la placa y, como referencia independiente, el periodo medio del PC sobre toda la ventana, donde ese retraso se compensa.
+- **P02, reloj de la placa.** El reloj de la placa va 0,69 % más rápido que el del PC. Es muy inferior a la tolerancia del enunciado (±5 %) y no se corrigió.
+- **P02, inicio del registro.** El registro empieza en `t=143300`, a mitad de un segundo, porque se abrió con la placa ya en marcha. No hay reinicios ni diálogos abiertos durante la medición.
+- **P02, primer intento descartado.** El primer registro (20:13) se tomó con la placa corriendo todavía el firmware sin traza, porque la versión compilada no se había cargado; solo tenía telemetría y se borró. Las mediciones válidas son las de `P02_tiempos.log`.

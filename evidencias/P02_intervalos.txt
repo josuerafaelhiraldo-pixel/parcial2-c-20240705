@@ -1,0 +1,26 @@
+Registro: P02_tiempos.log
+Lineas: 1051; no reconocidas: 0; ventana del PC: 80.1 s
+
+ADC (@ACQ) (periodo nominal 100 ms, limite 95 a 105 ms)
+  lineas: 808, intervalos: 807
+  reloj de la placa: minimo 100 ms, medio 100.00 ms, maximo 100 ms, desviacion maxima 0.00 %, fuera de +-5 %: 0
+  reloj del PC: periodo medio 99.31 ms (-0.694 %); intervalos sueltos de 84 a 115 ms (informativo, jitter del PC)
+  resultado: CUMPLE
+
+LED LD2 (@LED) (periodo nominal 500 ms, limite 475 a 525 ms)
+  lineas: 162, intervalos: 161
+  reloj de la placa: minimo 500 ms, medio 500.00 ms, maximo 500 ms, desviacion maxima 0.00 %, fuera de +-5 %: 0
+  reloj del PC: periodo medio 496.55 ms (-0.689 %); intervalos sueltos de 482 a 511 ms (informativo, jitter del PC)
+  resultado: CUMPLE
+
+Telemetria (periodo nominal 1000 ms, limite 950 a 1050 ms)
+  lineas: 81, intervalos: 80
+  reloj de la placa: minimo 1000 ms, medio 1000.00 ms, maximo 1000 ms, desviacion maxima 0.00 %, fuera de +-5 %: 0
+  reloj del PC: periodo medio 993.14 ms (-0.686 %); intervalos sueltos de 979 a 1006 ms (informativo, jitter del PC)
+  resultado: CUMPLE
+
+LD2 alterna 1, 0, 1, 0: 162 cambios, repetidos seguidos: 0 -> CUMPLE
+Reloj de la placa contra reloj del PC (telemetria, primera a ultima): placa 80000 ms, PC 79451 ms, diferencia +0.691 %
+
+Desviacion maxima de un intervalo entre las tres tareas: 0.00 % (limite 5 %)
+RESULTADO: PASS

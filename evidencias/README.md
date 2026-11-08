@@ -52,6 +52,9 @@ Con Local echo activado, el texto escrito puede aparecer pegado a una línea de 
 | --- | --- |
 | `P01_compilacion.png` | Consola de CubeIDE: `Build Finished. 0 errors, 0 warnings` y tamaños del programa |
 | `P01_arranque.log` | Registro con marcas de tiempo: `STATUS` cada 100 ms (macro `pruebas/herramientas/p01_status_rafaga.ttl`) y tres reinicios con RESET; tras cada uno la primera respuesta llega con t menor de 200 ms |
+| `P02_compilacion_traza.png` | Consola de CubeIDE con `APP_TRACE = 1`: 0 errores, 1 advertencia (`APP_TRACE activo`) y tamaños del programa con la traza (text 21252, data 12, bss 2596) |
+| `P02_tiempos.log` | Registro con marcas de tiempo de 80 s con la traza activa: líneas `@ACQ` (cada 100 ms), `@LED` (cada 500 ms) y telemetría (cada 1000 ms) |
+| `P02_intervalos.txt` | Salida de `pruebas/herramientas/medir_tiempos.c` sobre `P02_tiempos.log`: intervalos con el reloj de la placa y del PC, alternancia de LD2 y resultado |
 | `P03_niveles.log` | Registro con marcas de tiempo de los tres niveles del potenciómetro (mínimo, centro y máximo) con las respuestas de `STATUS` de cada uno |
 | `P03_multimetro_0pct.jpg` | Multímetro entre A0 y GND con el potenciómetro en el mínimo: 0,00 V |
 | `P03_multimetro_50pct.jpg` | Multímetro con el potenciómetro en el centro: 1,66 V |
