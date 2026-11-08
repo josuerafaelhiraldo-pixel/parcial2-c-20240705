@@ -77,4 +77,4 @@ Con Local echo activado, el texto escrito puede aparecer pegado a una línea de 
 
 ## Video de la demostración
 
-(Se agrega el enlace al cierre del proyecto.)
+Video de la demostración en YouTube (duración 12 min 27 s): https://youtu.be/5uD3u4qY610
